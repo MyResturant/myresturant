@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY RESTAURANT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            margin: 0; font-family: 'Poppins', sans-serif; color: #fff; text-align: left;
+            background: url('https://i.postimg.cc/fTv7fhX9/Black-Beige-Elegant-Fancy-Restaurant-Menu-20260218-115517-0000.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); z-index: -1; }
+        .header { display: flex; align-items: center; padding: 15px; background: rgba(0,0,0,0.9); border-bottom: 2px solid #f1c40f; position: sticky; top: 0; z-index: 100; }
+        .logo { width: 55px; height: 55px; border-radius: 50%; border: 1.5px solid #f1c40f; margin-right: 15px; background: #000; }
+        .res-title { font-size: 18px; color:#f1c40f; font-weight: bold; letter-spacing: 1.5px; }
+        .filter-section { background: rgba(20,20,20,0.95); padding: 12px 15px; border-bottom: 1px solid #333; position: sticky; top: 87px; z-index: 99; }
+        #cat-filter { background: #111; color: #f1c40f; border: 1px solid #f1c40f; padding: 10px; border-radius: 8px; font-weight: bold; width: 100%; outline: none; }
+        .menu-container { padding: 15px; padding-bottom: 160px; max-width: 600px; margin: 0 auto; }
+        .item-card { display: flex; align-items: center; background: rgba(255,255,255,0.06); margin-bottom: 12px; padding: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(8px); }
+        .item-img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; margin-right: 15px; border: 1px solid #444; }
+        .item-info { flex: 1; }
+        .item-name { font-weight: 600; font-size: 16px; display: block; color: #fff; }
+        .price { color: #f1c40f; font-weight: bold; font-size: 17px; }
+        .qty-box { display: flex; align-items: center; background: #f1c40f; color: #000; border-radius: 8px; padding: 4px 8px; }
+        .qty-btn { background: none; border: none; font-weight: bold; font-size: 22px; cursor: pointer; color: #000; padding: 0 5px; }
+        .footer { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 20px; border-top: 2px solid #f1c40f; box-sizing: border-box; z-index: 1000; }
+        .order-btn { background: #25d366; color: #fff; border: none; width: 100%; padding: 14px; border-radius: 10px; font-weight: bold; font-size: 17px; cursor: pointer; width: 100%; }
+        .table-select { background:#222; color:#fff; border:1px solid #f1c40f; border-radius:5px; padding: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="https://i.postimg.cc/Cx1hrjZn/Black-White-Minimalist-Professional-Initial-Logo-20260215-161109-0000.png" class="logo">
+    <div class="res-title">MY RESTAURANT</div>
+</div>
+
+<div class="filter-section">
+    <select id="cat-filter" onchange="applyFilter()"><option value="all">🔍 ALL CATEGORIES</option></select>
+</div>
+
+<div id="menu-display" class="menu-container"></div>
+
+<div class="footer">
+    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span>📍 Table: <select id="table-no" class="table-select"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option></select></span>
+        <span>Total: <b style="color:#f1c40f; font-size:22px;">₹<span id="total-val">0</span></b></span>
+    </div>
+    <button class="order-btn" onclick="sendOrder()">🚀 SEND ORDER (WHATSAPP)</button>
+</div>
+
+<script>
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/1y4tXP_8SZ_iUHYcl7vA6gq72zILeEoVHCuSOXyi2ubo/gviz/tq?tqx=out:csv';
+    let fullMenu = [], cart = {};
+
+    async function loadData() {
+        const resp = await fetch(CSV_URL); const text = await resp.text();
+        const rows = text.split('\n').slice(1); let cats = new Set();
+        fullMenu = rows.map(r => {
+            const c = r.split('","').map(x => x.replace(/"/g, '').trim());
+            if(c[0]) { cats.add(c[3] || "General"); return { name: c[0], price: parseInt(c[1]) || 0, img: c[2], cat: c[3] || "General" }; }
+        }).filter(Boolean);
+        cats.forEach(x => { document.getElementById('cat-filter').innerHTML += `<option value="${x}">${x.toUpperCase()}</option>`; });
+        displayItems(fullMenu);
+    }
+
+    function displayItems(items) {
+        let h = ''; items.forEach(i => {
+            let cleanId = i.name.replace(/[^a-zA-Z0-9]/g, "");
+            h += `<div class="item-card"><img src="${i.img}" class="item-img" onerror="this.src='https://via.placeholder.com/80?text=Food'"><div class="item-info"><span class="item-name">${i.name}</span><span class="price">₹${i.price}</span></div><div class="qty-box"><button class="qty-btn" onclick="update('${i.name.replace(/'/g,"")}',${i.price},-1)">-</button><span id="q-${cleanId}" style="width:25px;text-align:center;font-weight:bold;">0</span><button class="qty-btn" onclick="update('${i.name.replace(/'/g,"")}',${i.price},1)">+</button></div></div>`;
+        }); document.getElementById('menu-display').innerHTML = h;
+    }
+
+    function update(n, p, c) {
+        let cleanId = n.replace(/[^a-zA-Z0-9]/g, "");
+        if(!cart[n]) cart[n] = {qty:0, p:p}; cart[n].qty += c; if(cart[n].qty < 0) cart[n].qty = 0;
+        document.getElementById('q-'+cleanId).innerText = cart[n].qty;
+        let t = 0; for(let k in cart) t += cart[k].qty * cart[k].p;
+        document.getElementById('total-val').innerText = t;
+    }
+
+    function applyFilter() { const v = document.getElementById('cat-filter').value; displayItems(v==='all' ? fullMenu : fullMenu.filter(i=>i.cat===v)); }
+
+    function sendOrder() {
+        let t = document.getElementById('table-no').value, tot = document.getElementById('total-val').innerText;
+        if(tot == "0") return alert("Please select items!");
+        let m = `🍽️ *NEW ORDER - TABLE ${t}*%0A--------------------------%0A`;
+        for(let k in cart) if(cart[k].qty > 0) m += `🔹 ${k} (${cart[k].qty}x)%0A`;
+        m += `--------------------------%0A💰 *TOTAL: ₹${tot}*`; 
+        window.open(`https://wa.me/919474029463?text=${m}`);
+    }
+    loadData();
+</script>
+</body>
+</html>
