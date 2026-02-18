@@ -7,37 +7,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body { 
-            margin: 0; font-family: 'Poppins', sans-serif; color: #fff; text-align: left;
+            margin: 0; font-family: 'Poppins', sans-serif; color: #fff;
             background: url('https://i.postimg.cc/fTv7fhX9/Black-Beige-Elegant-Fancy-Restaurant-Menu-20260218-115517-0000.png') no-repeat center center fixed;
             background-size: cover;
         }
-        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); z-index: -1; }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: -1; }
+        
         .header { display: flex; align-items: center; padding: 15px; background: rgba(0,0,0,0.9); border-bottom: 2px solid #f1c40f; position: sticky; top: 0; z-index: 100; }
-        .logo { width: 55px; height: 55px; border-radius: 50%; border: 1.5px solid #f1c40f; margin-right: 15px; background: #000; }
-        .res-title { font-size: 18px; color:#f1c40f; font-weight: bold; letter-spacing: 1.5px; }
+        .logo { width: 50px; height: 50px; border-radius: 50%; border: 1.5px solid #f1c40f; margin-right: 15px; }
+        .res-title { font-size: 18px; color:#f1c40f; font-weight: bold; }
         
-        .controls-section { background: rgba(20,20,20,0.95); padding: 12px 15px; border-bottom: 1px solid #333; position: sticky; top: 87px; z-index: 99; }
-        #search-box { background: #222; color: #fff; border: 1px solid #444; padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 10px; box-sizing: border-box; outline: none; }
+        .search-area { background: rgba(20,20,20,0.95); padding: 15px; position: sticky; top: 82px; z-index: 99; border-bottom: 1px solid #333; }
+        #search-box { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; outline: none; margin-bottom: 10px; }
         #search-box:focus { border-color: #f1c40f; }
-        #cat-filter { background: #111; color: #f1c40f; border: 1px solid #f1c40f; padding: 10px; border-radius: 8px; font-weight: bold; width: 100%; outline: none; }
-        
-        .menu-container { padding: 15px; padding-bottom: 200px; max-width: 600px; margin: 0 auto; }
-        .item-card { display: flex; align-items: center; background: rgba(255,255,255,0.06); margin-bottom: 12px; padding: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(8px); }
-        .item-img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; margin-right: 15px; border: 1px solid #444; }
-        .item-info { flex: 1; }
-        .item-name { font-weight: 600; font-size: 16px; display: block; color: #fff; }
-        .price { color: #f1c40f; font-weight: bold; font-size: 17px; }
-        .qty-box { display: flex; align-items: center; background: #f1c40f; color: #000; border-radius: 8px; padding: 4px 8px; }
-        .qty-btn { background: none; border: none; font-weight: bold; font-size: 22px; cursor: pointer; color: #000; padding: 0 5px; }
-        
-        .feedback-section { background: rgba(0,0,0,0.85); border: 1px solid #f1c40f; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center; }
-        .star-btn { font-size: 35px; cursor: pointer; color: #444; background: none; border: none; }
-        .star-btn.active { color: #f1c40f; }
-        .fb-btn { display: none; background: #f1c40f; color: #000; border: none; padding: 12px 25px; border-radius: 8px; margin-top: 15px; font-weight: bold; cursor: pointer; width: 100%; }
+        #cat-filter { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #f1c40f; background: #000; color: #f1c40f; font-weight: bold; }
 
-        .footer { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 20px; border-top: 2px solid #f1c40f; box-sizing: border-box; z-index: 1000; }
-        .order-btn { background: #25d366; color: #fff; border: none; width: 100%; padding: 14px; border-radius: 10px; font-weight: bold; font-size: 17px; cursor: pointer; }
-        .table-select { background:#222; color:#fff; border:1px solid #f1c40f; border-radius:5px; padding: 5px; font-weight: bold; }
+        .menu-container { padding: 15px; padding-bottom: 180px; max-width: 600px; margin: 0 auto; }
+        .item-card { display: flex; align-items: center; background: rgba(255,255,255,0.08); margin-bottom: 15px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .item-img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; margin-right: 15px; }
+        .item-info { flex: 1; }
+        .item-name { font-weight: 600; font-size: 16px; color: #fff; display: block; }
+        .price { color: #f1c40f; font-weight: bold; font-size: 18px; }
+        
+        .qty-box { display: flex; align-items: center; background: #f1c40f; color: #000; border-radius: 6px; padding: 2px 8px; }
+        .qty-btn { background: none; border: none; font-weight: bold; font-size: 20px; cursor: pointer; padding: 0 8px; }
+
+        .footer { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 20px; border-top: 2px solid #f1c40f; box-sizing: border-box; }
+        .order-btn { background: #25d366; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .table-select { background:#222; color:#fff; border:1px solid #f1c40f; padding: 4px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -47,105 +44,101 @@
     <div class="res-title">MY RESTAURANT</div>
 </div>
 
-<div class="controls-section">
-    <input type="text" id="search-box" placeholder="🔍 Search for a dish..." onkeyup="filterItems()">
-    <select id="cat-filter" onchange="filterItems()"><option value="all">🔍 ALL CATEGORIES</option></select>
+<div class="search-area">
+    <input type="text" id="search-box" placeholder="🔍 Search dishes..." onkeyup="runFilter()">
+    <select id="cat-filter" onchange="runFilter()"><option value="all">ALL CATEGORIES</option></select>
 </div>
 
 <div id="menu-display" class="menu-container"></div>
 
-<div class="menu-container" style="padding-top:0;">
-    <div class="feedback-section">
-        <h3 style="color:#f1c40f; margin-top:0;">Rate Our Food ⭐</h3>
-        <button class="star-btn" onclick="rate(1)">★</button>
-        <button class="star-btn" onclick="rate(2)">★</button>
-        <button class="star-btn" onclick="rate(3)">★</button>
-        <button class="star-btn" onclick="rate(4)">★</button>
-        <button class="star-btn" onclick="rate(5)">★</button>
-        <p id="rate-msg" style="font-size:14px; margin-top: 10px; font-weight: bold;"></p>
-        <button id="fb-submit" class="fb-btn" onclick="sendFeedback()">Submit Feedback via WhatsApp</button>
-    </div>
-</div>
-
 <div class="footer">
-    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <span> Table: 
             <select id="table-no" class="table-select">
-                <option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>
+                <option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option>
+                <option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>
             </select>
         </span>
-        <span>Total: <b style="color:#f1c40f; font-size:22px;">₹<span id="total-val">0</span></b></span>
+        <span>Total: <b style="color:#f1c40f; font-size:20px;">₹<span id="total-val">0</span></b></span>
     </div>
     <button class="order-btn" onclick="sendOrder()"> SEND ORDER (WHATSAPP)</button>
 </div>
 
 <script>
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/1y4tXP_8SZ_iUHYcl7vA6gq72zILeEoVHCuSOXyi2ubo/gviz/tq?tqx:out:csv';
-    let fullMenu = [], cart = {}, currentRating = 0;
+    const URL = 'https://docs.google.com/spreadsheets/d/1y4tXP_8SZ_iUHYcl7vA6gq72zILeEoVHCuSOXyi2ubo/gviz/tq?tqx=out:csv';
+    let menuData = [], cart = {};
 
-    async function loadData() {
-        const resp = await fetch(CSV_URL); const text = await resp.text();
-        const rows = text.split('\n').slice(1); let cats = new Set();
-        fullMenu = rows.map(r => {
-            const c = r.split('","').map(x => x.replace(/"/g, '').trim());
-            if(c[0]) { cats.add(c[3] || "General"); return { name: c[0], price: parseInt(c[1]) || 0, img: c[2], cat: c[3] || "General" }; }
+    async function loadMenu() {
+        const response = await fetch(URL);
+        const data = await response.text();
+        const rows = data.split('\n').slice(1);
+        let categories = new Set();
+        
+        menuData = rows.map(row => {
+            const cols = row.split('","').map(c => c.replace(/"/g, '').trim());
+            if(cols[0]) {
+                categories.add(cols[3] || "General");
+                return { name: cols[0], price: parseInt(cols[1]) || 0, img: cols[2], cat: cols[3] || "General" };
+            }
         }).filter(Boolean);
-        cats.forEach(x => { document.getElementById('cat-filter').innerHTML += `<option value="${x}">${x.toUpperCase()}</option>`; });
-        displayItems(fullMenu);
+
+        categories.forEach(c => { document.getElementById('cat-filter').innerHTML += `<option value="${c}">${c}</option>`; });
+        renderMenu(menuData);
     }
 
-    function displayItems(items) {
-        let h = ''; items.forEach(i => {
-            let cleanId = i.name.replace(/[^a-zA-Z0-9]/g, "");
-            let currentQty = cart[i.name] ? cart[i.name].qty : 0;
-            h += `<div class="item-card"><img src="${i.img}" class="item-img" onerror="this.src='https://via.placeholder.com/80?text=Food'"><div class="item-info"><span class="item-name">${i.name}</span><span class="price">₹${i.price}</span></div><div class="qty-box"><button class="qty-btn" onclick="update('${i.name.replace(/'/g,"")}',${i.price},-1)">-</button><span id="q-${cleanId}" style="width:25px;text-align:center;font-weight:bold;">${currentQty}</span><button class="qty-btn" onclick="update('${i.name.replace(/'/g,"")}',${i.price},1)">+</button></div></div>`;
-        }); document.getElementById('menu-display').innerHTML = h;
-    }
-
-    function update(n, p, c) {
-        let cleanId = n.replace(/[^a-zA-Z0-9]/g, "");
-        if(!cart[n]) cart[n] = {qty:0, p:p}; cart[n].qty += c; if(cart[n].qty < 0) cart[n].qty = 0;
-        let qtySpan = document.getElementById('q-'+cleanId);
-        if(qtySpan) qtySpan.innerText = cart[n].qty;
-        let t = 0; for(let k in cart) t += cart[k].qty * cart[k].p;
-        document.getElementById('total-val').innerText = t;
-    }
-
-    function filterItems() {
-        const query = document.getElementById('search-box').value.toLowerCase();
-        const cat = document.getElementById('cat-filter').value;
-        const filtered = fullMenu.filter(i => {
-            const matchesSearch = i.name.toLowerCase().includes(query);
-            const matchesCat = (cat === 'all' || i.cat === cat);
-            return matchesSearch && matchesCat;
+    function renderMenu(items) {
+        let html = '';
+        items.forEach(item => {
+            let cleanId = item.name.replace(/[^a-zA-Z0-9]/g, "");
+            let q = cart[item.name] ? cart[item.name].qty : 0;
+            html += `<div class="item-card">
+                <img src="${item.img}" class="item-img" onerror="this.src='https://via.placeholder.com/80'">
+                <div class="item-info"><span class="item-name">${item.name}</span><span class="price">₹${item.price}</span></div>
+                <div class="qty-box">
+                    <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},-1)">-</button>
+                    <span id="q-${cleanId}" style="width:20px;text-align:center;font-weight:bold;">${q}</span>
+                    <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},1)">+</button>
+                </div>
+            </div>`;
         });
-        displayItems(filtered);
+        document.getElementById('menu-display').innerHTML = html;
     }
 
-    function rate(n) {
-        currentRating = n;
-        let stars = document.querySelectorAll('.star-btn');
-        stars.forEach((s, i) => { s.classList.toggle('active', i < n); });
-        let msgs = ["", "Disappointing 😞", "Average 😐", "Good 🙂", "Very Good 😊", "Excellent! 😍"];
-        document.getElementById('rate-msg').innerText = msgs[n];
-        document.getElementById('fb-submit').style.display = 'block';
+    function changeQty(name, price, delta) {
+        if(!cart[name]) cart[name] = {qty:0, price:price};
+        cart[name].qty += delta;
+        if(cart[name].qty < 0) cart[name].qty = 0;
+        
+        let cleanId = name.replace(/[^a-zA-Z0-9]/g, "");
+        document.getElementById('q-'+cleanId).innerText = cart[name].qty;
+        
+        let total = 0;
+        for(let key in cart) total += cart[key].qty * cart[key].price;
+        document.getElementById('total-val').innerText = total;
     }
 
-    function sendFeedback() {
-        let t = document.getElementById('table-no').value;
-        let m = `⭐ *FOOD FEEDBACK - TABLE ${t}*%0A--------------------------%0ARating: *${currentRating} / 5 Stars*%0AStatus: ${document.getElementById('rate-msg').innerText}%0A--------------------------`;
-        window.open(`https://wa.me/919474029463?text=${m}`);
+    function runFilter() {
+        const s = document.getElementById('search-box').value.toLowerCase();
+        const c = document.getElementById('cat-filter').value;
+        const filtered = menuData.filter(i => (i.name.toLowerCase().includes(s)) && (c === 'all' || i.cat === c));
+        renderMenu(filtered);
     }
 
     function sendOrder() {
-        let t = document.getElementById('table-no').value, tot = document.getElementById('total-val').innerText;
-        if(tot == "0") return alert("Please select items!");
-        let m = `🍽️ *NEW ORDER - TABLE ${t}*%0A--------------------------%0A`;
-        for(let k in cart) { if(cart[k].qty > 0) { m += `🔹 *${k}*%0A      ${cart[k].qty} x ₹${cart[k].p} = *₹${cart[k].qty * cart[k].p}*%0A`; } }
-        m += `--------------------------%0A💰 *GRAND TOTAL: ₹${tot}*%0A--------------------------`;
-        window.open(`https://wa.me/919474029463?text=${m}`);
+        let table = document.getElementById('table-no').value;
+        let total = document.getElementById('total-val').innerText;
+        if(total == "0") return alert("Add items first!");
+        
+        let msg = `🍽️ *NEW ORDER - TABLE ${table}*%0A--------------------------%0A`;
+        for(let key in cart) {
+            if(cart[key].qty > 0) {
+                msg += `🔹 *${key}* (${cart[key].qty} x ₹${cart[key].price}) = *₹${cart[key].qty * cart[key].price}*%0A`;
+            }
+        }
+        msg += `--------------------------%0A💰 *GRAND TOTAL: ₹${total}*`;
+        window.open(`https://wa.me/919474029463?text=${msg}`);
     }
-    loadData();
+    loadMenu();
 </script>
 </body>
 </html>
