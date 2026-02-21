@@ -23,13 +23,20 @@
         #cat-filter { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #f1c40f; background: #000; color: #f1c40f; font-weight: bold; }
 
         .menu-container { padding: 15px; padding-bottom: 180px; max-width: 600px; margin: 0 auto; }
-        .item-card { display: flex; align-items: center; background: rgba(255,255,255,0.08); margin-bottom: 15px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
-        .item-img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; margin-right: 15px; }
+        
+        /* Updated Card Design */
+        .item-card { background: rgba(255,255,255,0.08); margin-bottom: 15px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .item-main { display: flex; align-items: center; cursor: pointer; }
+        .item-img { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; margin-right: 15px; }
         .item-info { flex: 1; }
         .item-name { font-weight: 600; font-size: 16px; color: #fff; display: block; }
-        .price { color: #f1c40f; font-weight: bold; font-size: 18px; }
+        .price { color: #f1c40f; font-weight: bold; font-size: 16px; }
         
-        .qty-box { display: flex; align-items: center; background: #f1c40f; color: #000; border-radius: 6px; padding: 2px 8px; }
+        /* Description Styling */
+        .item-desc { display: none; padding: 10px; background: rgba(241, 196, 15, 0.1); border-radius: 8px; margin-top: 10px; font-size: 13px; color: #ddd; border-left: 3px solid #f1c40f; }
+        .arrow-icon { color: #f1c40f; font-size: 12px; margin-left: 5px; transition: 0.3s; }
+
+        .qty-box { display: flex; align-items: center; background: #f1c40f; color: #000; border-radius: 6px; padding: 2px 8px; height: 30px; }
         .qty-btn { background: none; border: none; font-weight: bold; font-size: 20px; cursor: pointer; padding: 0 8px; }
 
         .footer { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 20px; border-top: 2px solid #f1c40f; box-sizing: border-box; }
@@ -69,21 +76,31 @@
     let menuData = [], cart = {};
 
     async function loadMenu() {
-        const response = await fetch(URL);
-        const data = await response.text();
-        const rows = data.split('\n').slice(1);
-        let categories = new Set();
-        
-        menuData = rows.map(row => {
-            const cols = row.split('","').map(c => c.replace(/"/g, '').trim());
-            if(cols[0]) {
-                categories.add(cols[3] || "General");
-                return { name: cols[0], price: parseInt(cols[1]) || 0, img: cols[2], cat: cols[3] || "General" };
-            }
-        }).filter(Boolean);
+        try {
+            const response = await fetch(URL);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1);
+            let categories = new Set();
+            
+            menuData = rows.map(row => {
+                // CSV splitting logic
+                const cols = row.split('","').map(c => c.replace(/"/g, '').trim());
+                if(cols[0]) {
+                    categories.add(cols[3] || "General");
+                    return { 
+                        name: cols[0], 
+                        price: parseInt(cols[1]) || 0, 
+                        img: cols[2], 
+                        cat: cols[3] || "General",
+                        desc: cols[4] || "No description available." // <--- NEW COLUMN E (Index 4)
+                    };
+                }
+            }).filter(Boolean);
 
-        categories.forEach(c => { document.getElementById('cat-filter').innerHTML += `<option value="${c}">${c}</option>`; });
-        renderMenu(menuData);
+            document.getElementById('cat-filter').innerHTML = '<option value="all">ALL CATEGORIES</option>';
+            categories.forEach(c => { document.getElementById('cat-filter').innerHTML += `<option value="${c}">${c}</option>`; });
+            renderMenu(menuData);
+        } catch(e) { console.log("Error loading menu", e); }
     }
 
     function renderMenu(items) {
@@ -91,17 +108,38 @@
         items.forEach(item => {
             let cleanId = item.name.replace(/[^a-zA-Z0-9]/g, "");
             let q = cart[item.name] ? cart[item.name].qty : 0;
-            html += `<div class="item-card">
-                <img src="${item.img}" class="item-img" onerror="this.src='https://via.placeholder.com/80'">
-                <div class="item-info"><span class="item-name">${item.name}</span><span class="price">₹${item.price}</span></div>
-                <div class="qty-box">
-                    <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},-1)">-</button>
-                    <span id="q-${cleanId}" style="width:20px;text-align:center;font-weight:bold;">${q}</span>
-                    <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},1)">+</button>
+            
+            html += `
+            <div class="item-card">
+                <div class="item-main" onclick="toggleDesc('${cleanId}')">
+                    <img src="${item.img}" class="item-img" onerror="this.src='https://via.placeholder.com/80'">
+                    <div class="item-info">
+                        <span class="item-name">${item.name} <span id="arrow-${cleanId}" class="arrow-icon">▼</span></span>
+                        <span class="price">₹${item.price}</span>
+                    </div>
+                    <div class="qty-box" onclick="event.stopPropagation()">
+                        <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},-1)">-</button>
+                        <span id="q-${cleanId}" style="width:20px;text-align:center;font-weight:bold;">${q}</span>
+                        <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},1)">+</button>
+                    </div>
                 </div>
+                <div id="desc-${cleanId}" class="item-desc">${item.desc}</div>
             </div>`;
         });
         document.getElementById('menu-display').innerHTML = html;
+    }
+
+    // Toggle Function for Description
+    function toggleDesc(id) {
+        let d = document.getElementById('desc-' + id);
+        let a = document.getElementById('arrow-' + id);
+        if (d.style.display === "block") {
+            d.style.display = "none";
+            a.style.transform = "rotate(0deg)";
+        } else {
+            d.style.display = "block";
+            a.style.transform = "rotate(180deg)";
+        }
     }
 
     function changeQty(name, price, delta) {
