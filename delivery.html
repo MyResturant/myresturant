@@ -55,7 +55,7 @@
 
 <div id="delivery-form">
     <h2 style="color:#f1c40f; text-align:center; margin-bottom:10px;">SECURE CHECKOUT</h2>
-    <div class="warning-box">MANDATORY: ATTACH LOCATION & ENTER PAYMENT ID</div>
+    <div class="warning-box">MANDATORY: ATTACH LOCATION & COMPLETE ADDRESS</div>
     
     <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px solid #333;">
         <p id="order-summary" style="font-size: 14px; border-bottom: 1px solid #333; padding-bottom: 10px; color: #bbb;"></p>
@@ -69,9 +69,10 @@
         <input type="text" id="manual-map-link" class="input-field" placeholder="Paste Google Maps Link Here (Required)">
         
         <div style="display: flex; gap: 8px;">
-            <input type="text" id="house-no" class="input-field" placeholder="House No." style="flex: 1;">
-            <input type="text" id="area" class="input-field" placeholder="Street / Area" style="flex: 2;">
+            <input type="text" id="house-no" class="input-field" placeholder="House/Flat No." style="flex: 1;">
+            <input type="text" id="area" class="input-field" placeholder="Area / City" style="flex: 2;">
         </div>
+        <input type="text" id="street-address" class="input-field" placeholder="Full Address / Road Name (e.g. GT Road)">
         <input type="text" id="landmark" class="input-field" placeholder="Landmark (Required)">
         
         <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 10px;">
@@ -183,17 +184,18 @@
         let name = document.getElementById('cust-name').value.trim();
         let hno = document.getElementById('house-no').value.trim();
         let area = document.getElementById('area').value.trim();
+        let street = document.getElementById('street-address').value.trim();
         let lmark = document.getElementById('landmark').value.trim();
         let mapLink = document.getElementById('manual-map-link').value.trim();
         let txn = document.getElementById('txn-id').value.trim();
         let total = document.getElementById('total-val').innerText;
 
-        if(!name || !hno || !area || !lmark) return alert("❌ Error: All Name and Address fields are required.");
+        if(!name || !hno || !area || !street || !lmark) return alert("❌ Error: All Name and Address fields are required.");
         if(!mapLink) return alert("❌ Error: Please attach or paste Google Maps Location link.");
-        if(txn.length < 10) return alert("❌ Error: Valid 12-digit Payment Reference ID required.");
+        if(txn.length < 10) return alert("❌ Error: Valid Payment Reference ID required.");
 
         let msg = `*OFFICIAL DELIVERY ORDER*%0A--------------------------%0A`;
-        msg += `👤 *Customer:* ${name}%0A🏠 *House:* ${hno}%0A📍 *Area:* ${area}%0A🏢 *Landmark:* ${lmark}%0A🌍 *Location:* ${mapLink}%0A--------------------------%0A*Items:*%0A`;
+        msg += `👤 *Customer:* ${name}%0A🏠 *House No:* ${hno}%0A📍 *Area/City:* ${area}%0A🛣️ *Address:* ${street}%0A🏢 *Landmark:* ${lmark}%0A🌍 *Location:* ${mapLink}%0A--------------------------%0A*Items:*%0A`;
         for(let key in cart) {
             if(cart[key].qty > 0) msg += `🔹 ${key} x ${cart[key].qty} = ₹${cart[key].qty * cart[key].price}%0A`;
         }
