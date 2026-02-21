@@ -3,144 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Home Delivery</title>
+    <title>MY RESTAURANT - HOME DELIVERY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* Aapka Purana Look */
-        body { font-family: 'Segoe UI', sans-serif; background-color: #121212; color: #f0f0f0; padding: 15px; }
-        .card { background: #1e1e1e; padding: 20px; border-radius: 15px; border: 1px solid #d4af37; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h2 { color: #d4af37; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #333; }
-        .price { color: #d4af37; font-weight: bold; margin-right: 10px; }
-        .add-btn { background: #d4af37; color: black; border: none; padding: 6px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        body { 
+            margin: 0; font-family: 'Poppins', sans-serif; color: #fff;
+            background: url('https://i.postimg.cc/fTv7fhX9/Black-Beige-Elegant-Fancy-Restaurant-Menu-20260218-115517-0000.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: -1; }
         
-        /* Checkout Page Design */
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #252525; color: white; box-sizing: border-box; }
-        .btn-order { background: #27ae60; color: white; padding: 15px; width: 100%; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .btn-map { background: #3498db; color: white; padding: 10px; width: 100%; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        #checkoutPage { display: none; }
-        .bill-box { background: #252525; padding: 15px; border-radius: 10px; border: 1px dashed #d4af37; margin-top: 15px; }
+        .header { display: flex; align-items: center; padding: 15px; background: rgba(0,0,0,0.9); border-bottom: 2px solid #f1c40f; position: sticky; top: 0; z-index: 100; }
+        .logo { width: 50px; height: 50px; border-radius: 50%; border: 1.5px solid #f1c40f; margin-right: 15px; }
+        .res-title { font-size: 18px; color:#f1c40f; font-weight: bold; }
+        
+        .search-area { background: rgba(20,20,20,0.95); padding: 15px; position: sticky; top: 82px; z-index: 99; border-bottom: 1px solid #333; }
+        #search-box { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; outline: none; margin-bottom: 10px; }
+        
+        .menu-container { padding: 15px; padding-bottom: 220px; max-width: 600px; margin: 0 auto; }
+        .item-card { display: flex; align-items: center; background: rgba(255,255,255,0.08); margin-bottom: 15px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .item-img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; margin-right: 15px; }
+        .item-info { flex: 1; }
+        .item-name { font-weight: 600; font-size: 16px; color: #fff; display: block; }
+        .price { color: #f1c40f; font-weight: bold; font-size: 18px; }
+        
+        .qty-box { display: flex; align-items: center; background: #f1c40f; color: #000; border-radius: 6px; padding: 2px 8px; }
+        .qty-btn { background: none; border: none; font-weight: bold; font-size: 20px; cursor: pointer; padding: 0 8px; }
+
+        .footer { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 20px; border-top: 2px solid #f1c40f; box-sizing: border-box; }
+        .order-btn { background: #25d366; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        
+        /* New Delivery Styles */
+        #delivery-form { display: none; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .input-field { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #f1c40f; background: #111; color: #fff; }
+        .btn-pay { background: #e67e22; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; font-weight: bold; margin: 10px 0; }
+        .btn-map { background: #3498db; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div id="menuPage">
-    <h2>🏠 Home Delivery</h2>
-    <p style="text-align: center; color: #aaa; font-size: 14px;">Select items and proceed to checkout</p>
-    
-    <div class="card">
-        <div class="item-row">
-            <span>Paneer Tikka</span>
-            <div><span class="price">₹250</span><button class="add-btn" onclick="addToCart('Paneer Tikka', 250)">Add</button></div>
-        </div>
-        <div class="item-row">
-            <span>Butter Naan</span>
-            <div><span class="price">₹50</span><button class="add-btn" onclick="addToCart('Butter Naan', 50)">Add</button></div>
-        </div>
-        <div class="item-row">
-            <span>Special Thali</span>
-            <div><span class="price">₹350</span><button class="add-btn" onclick="addToCart('Special Thali', 350)">Add</button></div>
+<div class="header">
+    <img src="https://i.postimg.cc/Cx1hrjZn/Black-White-Minimalist-Professional-Initial-Logo-20260215-161109-0000.png" class="logo">
+    <div class="res-title">MY RESTAURANT (HOME DELIVERY)</div>
+</div>
+
+<div class="search-area">
+    <input type="text" id="search-box" placeholder="🔍 Search dishes..." onkeyup="runFilter()">
+</div>
+
+<div id="menu-display" class="menu-container"></div>
+
+<div id="delivery-form">
+    <h2 style="color:#f1c40f; text-align:center;">DELIVERY DETAILS</h2>
+    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px;">
+        <p id="order-summary" style="font-size: 14px; border-bottom: 1px solid #444; padding-bottom: 10px;"></p>
+        <input type="text" id="cust-name" class="input-field" placeholder="Full Name">
+        <textarea id="cust-addr" class="input-field" placeholder="Complete Address with Landmark" rows="3"></textarea>
+        
+        <button class="btn-map" onclick="getLocation()">📍 SHARE GOOGLE MAP LOCATION</button>
+        <p id="loc-status" style="font-size: 12px; color: #25d366; text-align: center;"></p>
+
+        <div style="margin-top: 15px; border-top: 1px solid #444; padding-top: 10px;">
+            <p style="font-size: 13px; color: #f1c40f;">Step 1: Pay via UPI</p>
+            <button class="btn-pay" onclick="payNow()">📱 PAY WITH UPI (GPay/PhonePe)</button>
+            <p style="font-size: 13px; color: #f1c40f; margin-top: 10px;">Step 2: Enter Transaction ID</p>
+            <input type="text" id="txn-id" class="input-field" placeholder="Transaction ID / UTR Number">
         </div>
 
-        <div style="margin-top: 20px; text-align: right;">
-            <h3>Total: ₹<span id="menuTotal">0</span></h3>
-            <button class="btn-order" style="background: #d4af37; color: black;" onclick="showCheckout()">Checkout ➡️</button>
-        </div>
+        <button class="order-btn" style="margin-top: 20px;" onclick="finalizeOrder()">🚀 CONFIRM ORDER ON WHATSAPP</button>
+        <button class="btn-pay" style="background: #555; margin-top: 10px;" onclick="closeForm()">Cancel</button>
     </div>
 </div>
 
-<div id="checkoutPage">
-    <h2>Complete Order</h2>
-    <div class="card">
-        <button class="add-btn" style="background: #555; color: white;" onclick="location.reload()">⬅️ Back to Menu</button>
-        
-        <div class="bill-box" id="billSummary"></div>
-
-        <input type="text" id="custName" placeholder="Aapka Naam">
-        <textarea id="custAddress" placeholder="Ghar ka address, Landmark ke saath" rows="3"></textarea>
-        
-        <button class="btn-map" onclick="getLocation()">📍 Click to Add My Map Location</button>
-        <p id="locationStatus" style="font-size: 12px; color: #27ae60; text-align: center; margin-top: 5px;"></p>
-
-        <div style="background: #333; padding: 10px; border-radius: 8px; margin-top: 15px;">
-            <p style="font-size: 14px; margin-bottom: 5px;">Step 1: Pay Total via UPI</p>
-            <button class="btn-map" style="background: #e67e22;" onclick="payNow()">📱 Pay with PhonePe/GPay</button>
-            <p style="font-size: 14px; margin-top: 15px;">Step 2: Enter Payment ID</p>
-            <input type="text" id="txnId" placeholder="Transaction ID (UTR Number)">
-        </div>
-
-        <button class="btn-order" onclick="sendWhatsApp()">🚀 ORDER ON WHATSAPP</button>
+<div class="footer">
+    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <span style="color:#f1c40f;"><b>🏠 HOME DELIVERY</b></span>
+        <span>Total: <b style="color:#f1c40f; font-size:20px;">₹<span id="total-val">0</span></b></span>
     </div>
+    <button class="order-btn" onclick="openForm()"> PROCEED TO CHECKOUT ➡️</button>
 </div>
 
 <script>
-    let cart = [];
-    let total = 0;
-    let mapsLink = "Not Provided";
+    const URL = 'https://docs.google.com/spreadsheets/d/1y4tXP_8SZ_iUHYcl7vA6gq72zILeEoVHCuSOXyi2ubo/gviz/tq?tqx=out:csv';
+    let menuData = [], cart = {}, mapsLink = "Not Shared";
 
-    function addToCart(name, price) {
-        cart.push({name, price});
-        total += price;
-        document.getElementById('menuTotal').innerText = total;
-        alert(name + " added to cart!");
+    async function loadMenu() {
+        const response = await fetch(URL);
+        const data = await response.text();
+        const rows = data.split('\n').slice(1);
+        menuData = rows.map(row => {
+            const cols = row.split('","').map(c => c.replace(/"/g, '').trim());
+            if(cols[0]) {
+                return { name: cols[0], price: parseInt(cols[1]) || 0, img: cols[2], cat: cols[3] || "General" };
+            }
+        }).filter(Boolean);
+        renderMenu(menuData);
     }
 
-    function showCheckout() {
-        if(total === 0) { alert("Pehle kuch items add karein!"); return; }
-        document.getElementById('menuPage').style.display = 'none';
-        document.getElementById('checkoutPage').style.display = 'block';
+    function renderMenu(items) {
+        let html = '';
+        items.forEach(item => {
+            let cleanId = item.name.replace(/[^a-zA-Z0-9]/g, "");
+            let q = cart[item.name] ? cart[item.name].qty : 0;
+            html += `<div class="item-card">
+                <img src="${item.img}" class="item-img" onerror="this.src='https://via.placeholder.com/80'">
+                <div class="item-info"><span class="item-name">${item.name}</span><span class="price">₹${item.price}</span></div>
+                <div class="qty-box">
+                    <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},-1)">-</button>
+                    <span id="q-${cleanId}" style="width:20px;text-align:center;font-weight:bold;">${q}</span>
+                    <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},1)">+</button>
+                </div>
+            </div>`;
+        });
+        document.getElementById('menu-display').innerHTML = html;
+    }
+
+    function changeQty(name, price, delta) {
+        if(!cart[name]) cart[name] = {qty:0, price:price};
+        cart[name].qty += delta;
+        if(cart[name].qty < 0) cart[name].qty = 0;
+        let cleanId = name.replace(/[^a-zA-Z0-9]/g, "");
+        let qElem = document.getElementById('q-'+cleanId);
+        if(qElem) qElem.innerText = cart[name].qty;
+        updateTotal();
+    }
+
+    function updateTotal() {
+        let total = 0;
+        for(let key in cart) total += cart[key].qty * cart[key].price;
+        document.getElementById('total-val').innerText = total;
+    }
+
+    function runFilter() {
+        const s = document.getElementById('search-box').value.toLowerCase();
+        const filtered = menuData.filter(i => i.name.toLowerCase().includes(s));
+        renderMenu(filtered);
+    }
+
+    // --- Delivery Logic ---
+    function openForm() {
+        let total = document.getElementById('total-val').innerText;
+        if(total == "0") return alert("Please add items first!");
         
-        let billHtml = "<strong>Bill Summary:</strong><br>";
-        cart.forEach(item => { billHtml += `${item.name} - ₹${item.price}<br>`; });
-        billHtml += `<hr><strong>Total Bill: ₹${total}</strong>`;
-        document.getElementById('billSummary').innerHTML = billHtml;
+        let summary = "<b>Your Order:</b><br>";
+        for(let key in cart) {
+            if(cart[key].qty > 0) summary += `${key} x ${cart[key].qty}<br>`;
+        }
+        document.getElementById('order-summary').innerHTML = summary + `<br><b>Total: ₹${total}</b>`;
+        document.getElementById('delivery-form').style.display = 'block';
     }
+
+    function closeForm() { document.getElementById('delivery-form').style.display = 'none'; }
 
     function getLocation() {
-        document.getElementById('locationStatus').innerText = "Fetching location... please allow access.";
+        document.getElementById('loc-status').innerText = "Locating...";
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    mapsLink = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
-                    document.getElementById('locationStatus').innerText = "✅ Location Added Successfully!";
-                },
-                (error) => {
-                    alert("Location access denied. Please type address manually.");
-                    document.getElementById('locationStatus').innerText = "❌ Location Access Denied.";
-                }
-            );
+            navigator.geolocation.getCurrentPosition(p => {
+                mapsLink = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+                document.getElementById('loc-status').innerText = "✅ Location Captured!";
+            }, () => {
+                alert("Please allow location access.");
+                document.getElementById('loc-status').innerText = "❌ Access Denied";
+            });
         }
     }
 
     function payNow() {
-        const upiId = "9474029463@okicici"; // Aapka UPI ID yahan daal dein
-        window.location.href = `upi://pay?pa=${upiId}&pn=VikasRestaurant&am=${total}&cu=INR`;
+        let total = document.getElementById('total-val').innerText;
+        window.location.href = `upi://pay?pa=9474029463@okicici&pn=VikasRestaurant&am=${total}&cu=INR`;
     }
 
-    function sendWhatsApp() {
-        const name = document.getElementById('custName').value;
-        const addr = document.getElementById('custAddress').value;
-        const txn = document.getElementById('txnId').value;
+    function finalizeOrder() {
+        let name = document.getElementById('cust-name').value;
+        let addr = document.getElementById('cust-addr').value;
+        let txn = document.getElementById('txn-id').value;
+        let total = document.getElementById('total-val').innerText;
 
-        if(!name || !addr || !txn) { alert("Please fill Name, Address and Payment ID!"); return; }
+        if(!name || !addr || !txn) return alert("Please fill Name, Address and Payment ID!");
 
-        let itemDetails = "";
-        cart.forEach(item => { itemDetails += `- ${item.name}: ₹${item.price}%0A`; });
-
-        const msg = `*🚀 NEW DELIVERY ORDER*%0A` +
-                    `--------------------------%0A` +
-                    `*Items:*%0A${itemDetails}` +
-                    `--------------------------%0A` +
-                    `*Total Amount: ₹${total}*%0A` +
-                    `--------------------------%0A` +
-                    `*Customer:* ${name}%0A` +
-                    `*Address:* ${addr}%0A` +
-                    `*Google Map:* ${mapsLink}%0A` +
-                    `*Transaction ID:* ${txn}%0A%0A` +
-                    `⚠️ _Please verify payment before delivery._`;
-
+        let msg = `🏠 *NEW DELIVERY ORDER*%0A--------------------------%0A`;
+        msg += `👤 *Customer:* ${name}%0A📍 *Address:* ${addr}%0A🌍 *Maps:* ${mapsLink}%0A--------------------------%0A*Items:*%0A`;
+        for(let key in cart) {
+            if(cart[key].qty > 0) msg += `🔹 ${key} x ${cart[key].qty}%0A`;
+        }
+        msg += `--------------------------%0A💰 *TOTAL PAID: ₹${total}*%0A🆔 *TXN ID:* ${txn}`;
+        
         window.open(`https://wa.me/919474029463?text=${msg}`);
     }
-</script>
 
+    loadMenu();
+</script>
 </body>
 </html>
