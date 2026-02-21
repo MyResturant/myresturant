@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RP Smart | Admin Terminal</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; }
+        .order-card { background: #1e1e1e; border: 1px solid #f1c40f; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
+        .btn-accept { background: #27ae60; color: white; padding: 10px; border: none; cursor: pointer; }
+        .btn-reject { background: #e74c3c; color: white; padding: 10px; border: none; cursor: pointer; }
+        input { margin: 5px 0; padding: 8px; width: 100%; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+    <h2>Admin Order Management</h2>
+    <div id="admin-orders">Loading...</div>
+
+    <script>
+        const API_URL = "YOUR_APPS_SCRIPT_URL_HERE";
+
+        async function loadOrders() {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            const container = document.getElementById('admin-orders');
+            container.innerHTML = "";
+
+            data.slice(1).reverse().forEach((row, index) => {
+                if(row[7] === "PENDING") {
+                    container.innerHTML += `
+                    <div class="order-card">
+                        <h3>Order from: ${row[1]}</h3>
+                        <p>Items: ${row[4]} | Total: ₹${row[5]}</p>
+                        <p>Txn ID: ${row[6]}</p>
+                        <hr>
+                        <input type="text" id="boy-${index}" placeholder="Delivery Boy Name">
+                        <input type="text" id="bike-${index}" placeholder="Bike Model/No">
+                        <input type="text" id="contact-${index}" placeholder="Contact Number">
+                        <button class="btn-accept" onclick="action('${row[2]}', 'accept', ${index})">✅ Confirm & WhatsApp</button>
+                        <button class="btn-reject" onclick="action('${row[2]}', 'reject', ${index})">❌ Reject</button>
+                    </div>`;
+                }
+            });
+        }
+
+        function action(customerPhone, type, idx) {
+            let msg = "";
+            if(type === 'accept') {
+                const boy = document.getElementById(`boy-${idx}`).value;
+                const bike = document.getElementById(`bike-${idx}`).value;
+                const contact = document.getElementById(`contact-${idx}`).value;
+                msg = `*Order Confirmed!*%0A%0AHello, your order is out for delivery.%0A🛵 *Boy:* ${boy}%0A🚲 *Bike:* ${bike}%0A📞 *Call:* ${contact}`;
+            } else {
+                msg = `*Order Rejected!*%0A%0ASorry, we cannot fulfill your order at this moment. Refund will be processed.`;
+            }
+            window.open(`https://wa.me/${customerPhone}?text=${msg}`);
+        }
+        
+        loadOrders();
+    </script>
+</body>
+</html>
