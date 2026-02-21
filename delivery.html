@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SECURE CHECKOUT - MY RESTAURANT</title>
+    <title>HOME DELIVERY - MY RESTAURANT</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body { 
@@ -44,7 +44,7 @@
 
 <div class="header">
     <img src="https://i.postimg.cc/Cx1hrjZn/Black-White-Minimalist-Professional-Initial-Logo-20260215-161109-0000.png" class="logo">
-    <div class="res-title">MY RESTAURANT | HOME DELIVERY ACTIVE</div>
+    <div class="res-title">MY RESTAURANT | HOME DELIVERY</div>
 </div>
 
 <div class="search-area">
@@ -54,7 +54,7 @@
 <div id="menu-display" class="menu-container"></div>
 
 <div id="delivery-form">
-    <h2 style="color:#f1c40f; text-align:center; margin-bottom:10px;">SECURE CHECKOUT</h2>
+    <h2 style="color:#f1c40f; text-align:center; margin-bottom:10px;">HOME DELIVERY CHECKOUT</h2>
     <div class="warning-box">MANDATORY: ATTACH LOCATION & COMPLETE ADDRESS</div>
     
     <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px solid #333;">
@@ -77,7 +77,7 @@
         
         <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 10px;">
             <p style="font-size: 13px; color: #f1c40f; margin-bottom: 5px;">Step 2: Digital Payment</p>
-            <button class="btn-pay" onclick="payNow()">📱 PAY TOTAL VIA UPI</button>
+            <button class="btn-pay" onclick="payNow()">📱 PAY VIA UPI (rprohit011@ybl)</button>
             <input type="text" id="txn-id" class="input-field" placeholder="Enter 12-Digit Reference/UTR ID">
         </div>
 
@@ -88,7 +88,7 @@
 
 <div class="footer">
     <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <span style="color:#f1c40f; font-weight: bold; font-size: 13px;">HOME DELIVERY </span>
+        <span style="color:#f1c40f; font-weight: bold; font-size: 13px;">HOME DELIVERY MODE</span>
         <span>Total: <b style="color:#f1c40f; font-size:22px;">₹<span id="total-val">0</span></b></span>
     </div>
     <button class="order-btn" onclick="openForm()">PROCEED TO CHECKOUT ➡️</button>
@@ -177,7 +177,8 @@
 
     function payNow() {
         let total = document.getElementById('total-val').innerText;
-        window.location.href = `upi://pay?pa=9474029463@okicici&pn=VikasRestaurant&am=${total}&cu=INR`;
+        // UPI Link with your ID: rprohit011@ybl
+        window.location.href = `upi://pay?pa=rprohit011@ybl&pn=VikasRestaurant&am=${total}&cu=INR`;
     }
 
     function finalizeOrder() {
@@ -190,17 +191,17 @@
         let txn = document.getElementById('txn-id').value.trim();
         let total = document.getElementById('total-val').innerText;
 
-        if(!name || !hno || !area || !street || !lmark) return alert("❌ Error: All Name and Address fields are required.");
-        if(!mapLink) return alert("❌ Error: Please attach or paste Google Maps Location link.");
-        if(txn.length < 10) return alert("❌ Error: Valid Payment Reference ID required.");
+        if(!name || !hno || !area || !street || !lmark) return alert("❌ Error: Name and complete Address details are mandatory.");
+        if(!mapLink) return alert("❌ Error: Location link is required for Home Delivery.");
+        if(txn.length < 10) return alert("❌ Error: Valid Payment Reference/UTR ID is required.");
 
-        let msg = `*OFFICIAL DELIVERY ORDER*%0A--------------------------%0A`;
+        let msg = `*OFFICIAL HOME DELIVERY ORDER*%0A--------------------------%0A`;
         msg += `👤 *Customer:* ${name}%0A🏠 *House No:* ${hno}%0A📍 *Area/City:* ${area}%0A🛣️ *Address:* ${street}%0A🏢 *Landmark:* ${lmark}%0A🌍 *Location:* ${mapLink}%0A--------------------------%0A*Items:*%0A`;
         for(let key in cart) {
             if(cart[key].qty > 0) msg += `🔹 ${key} x ${cart[key].qty} = ₹${cart[key].qty * cart[key].price}%0A`;
         }
         msg += `--------------------------%0A💰 *TOTAL PAID: ₹${total}*%0A🆔 *PAYMENT REF:* ${txn}%0A--------------------------%0A`;
-        msg += `✅ *MERCHANT:* Verify Payment before dispatch.`;
+        msg += `✅ *STATUS:* Verify Reference ID before dispatch.`;
         
         window.open(`https://wa.me/919474029463?text=${msg}`);
     }
