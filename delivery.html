@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MY RESTAURANT - HOME DELIVERY</title>
+    <title>SECURE CHECKOUT - MY RESTAURANT</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body { 
@@ -15,10 +15,10 @@
         
         .header { display: flex; align-items: center; padding: 15px; background: rgba(0,0,0,0.9); border-bottom: 2px solid #f1c40f; position: sticky; top: 0; z-index: 100; }
         .logo { width: 50px; height: 50px; border-radius: 50%; border: 1.5px solid #f1c40f; margin-right: 15px; }
-        .res-title { font-size: 18px; color:#f1c40f; font-weight: bold; }
+        .res-title { font-size: 18px; color:#f1c40f; font-weight: bold; text-transform: uppercase; }
         
         .search-area { background: rgba(20,20,20,0.95); padding: 15px; position: sticky; top: 82px; z-index: 99; border-bottom: 1px solid #333; }
-        #search-box { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; outline: none; margin-bottom: 10px; }
+        #search-box { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; outline: none; }
         
         .menu-container { padding: 15px; padding-bottom: 220px; max-width: 600px; margin: 0 auto; }
         .item-card { display: flex; align-items: center; background: rgba(255,255,255,0.08); margin-bottom: 15px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
@@ -31,73 +31,83 @@
         .qty-btn { background: none; border: none; font-weight: bold; font-size: 20px; cursor: pointer; padding: 0 8px; }
 
         .footer { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 20px; border-top: 2px solid #f1c40f; box-sizing: border-box; }
-        .order-btn { background: #25d366; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .order-btn { background: #25d366; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase; }
         
-        /* New Delivery Styles */
-        #delivery-form { display: none; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .input-field { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #f1c40f; background: #111; color: #fff; }
-        .btn-pay { background: #e67e22; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; font-weight: bold; margin: 10px 0; }
-        .btn-map { background: #3498db; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 10px; }
+        #delivery-form { display: none; background: rgba(0,0,0,0.98); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .input-field { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #f1c40f; background: #111; color: #fff; font-family: 'Poppins'; box-sizing: border-box;}
+        .warning-box { background: #d9534f; color: white; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 11px; }
+        .btn-pay { background: #f39c12; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; margin: 10px 0; cursor: pointer; text-transform: uppercase; }
+        .btn-map { background: #3498db; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 5px; cursor: pointer; font-weight: bold; font-size: 12px; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <img src="https://i.postimg.cc/Cx1hrjZn/Black-White-Minimalist-Professional-Initial-Logo-20260215-161109-0000.png" class="logo">
-    <div class="res-title">MY RESTAURANT (HOME DELIVERY)</div>
+    <div class="res-title">MY RESTAURANT | DELIVERY</div>
 </div>
 
 <div class="search-area">
-    <input type="text" id="search-box" placeholder="🔍 Search dishes..." onkeyup="runFilter()">
+    <input type="text" id="search-box" placeholder="🔍 Search menu items..." onkeyup="runFilter()">
 </div>
 
 <div id="menu-display" class="menu-container"></div>
 
 <div id="delivery-form">
-    <h2 style="color:#f1c40f; text-align:center;">DELIVERY DETAILS</h2>
-    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px;">
-        <p id="order-summary" style="font-size: 14px; border-bottom: 1px solid #444; padding-bottom: 10px;"></p>
-        <input type="text" id="cust-name" class="input-field" placeholder="Full Name">
-        <textarea id="cust-addr" class="input-field" placeholder="Complete Address with Landmark" rows="3"></textarea>
+    <h2 style="color:#f1c40f; text-align:center; margin-bottom:10px;">SECURE CHECKOUT</h2>
+    <div class="warning-box">MANDATORY: ATTACH LOCATION & ENTER PAYMENT ID</div>
+    
+    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px solid #333;">
+        <p id="order-summary" style="font-size: 14px; border-bottom: 1px solid #333; padding-bottom: 10px; color: #bbb;"></p>
         
-        <button class="btn-map" onclick="getLocation()">📍 SHARE GOOGLE MAP LOCATION</button>
-        <p id="loc-status" style="font-size: 12px; color: #25d366; text-align: center;"></p>
-
-        <div style="margin-top: 15px; border-top: 1px solid #444; padding-top: 10px;">
-            <p style="font-size: 13px; color: #f1c40f;">Step 1: Pay via UPI</p>
-            <button class="btn-pay" onclick="payNow()">📱 PAY WITH UPI (GPay/PhonePe)</button>
-            <p style="font-size: 13px; color: #f1c40f; margin-top: 10px;">Step 2: Enter Transaction ID</p>
-            <input type="text" id="txn-id" class="input-field" placeholder="Transaction ID / UTR Number">
+        <input type="text" id="cust-name" class="input-field" placeholder="Customer Full Name">
+        
+        <p style="font-size: 13px; color: #f1c40f; margin: 15px 0 5px 0;">Step 1: Set Delivery Location</p>
+        <button class="btn-map" id="map-btn" onclick="getLocation()">📍 AUTO-DETECT GPS LOCATION</button>
+        <button class="btn-map" style="background:#6c757d;" onclick="window.open('https://www.google.com/maps')">🗺️ OPEN MAPS TO COPY LINK</button>
+        
+        <input type="text" id="manual-map-link" class="input-field" placeholder="Paste Google Maps Link Here (Required)">
+        
+        <div style="display: flex; gap: 8px;">
+            <input type="text" id="house-no" class="input-field" placeholder="House No." style="flex: 1;">
+            <input type="text" id="area" class="input-field" placeholder="Street / Area" style="flex: 2;">
+        </div>
+        <input type="text" id="landmark" class="input-field" placeholder="Landmark (Required)">
+        
+        <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 10px;">
+            <p style="font-size: 13px; color: #f1c40f; margin-bottom: 5px;">Step 2: Digital Payment</p>
+            <button class="btn-pay" onclick="payNow()">📱 PAY TOTAL VIA UPI</button>
+            <input type="text" id="txn-id" class="input-field" placeholder="Enter 12-Digit Reference/UTR ID">
         </div>
 
-        <button class="order-btn" style="margin-top: 20px;" onclick="finalizeOrder()">🚀 CONFIRM ORDER ON WHATSAPP</button>
-        <button class="btn-pay" style="background: #555; margin-top: 10px;" onclick="closeForm()">Cancel</button>
+        <button class="order-btn" style="margin-top: 20px;" onclick="finalizeOrder()">PLACE ORDER ON WHATSAPP</button>
+        <button class="btn-pay" style="background: #444; margin-top: 10px;" onclick="closeForm()">RETURN TO MENU</button>
     </div>
 </div>
 
 <div class="footer">
     <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <span style="color:#f1c40f;"><b>🏠 HOME DELIVERY</b></span>
-        <span>Total: <b style="color:#f1c40f; font-size:20px;">₹<span id="total-val">0</span></b></span>
+        <span style="color:#f1c40f; font-weight: bold; font-size: 13px;">DELIVERY MODE</span>
+        <span>Total: <b style="color:#f1c40f; font-size:22px;">₹<span id="total-val">0</span></b></span>
     </div>
-    <button class="order-btn" onclick="openForm()"> PROCEED TO CHECKOUT ➡️</button>
+    <button class="order-btn" onclick="openForm()">PROCEED TO CHECKOUT ➡️</button>
 </div>
 
 <script>
-    const URL = 'https://docs.google.com/spreadsheets/d/1y4tXP_8SZ_iUHYcl7vA6gq72zILeEoVHCuSOXyi2ubo/gviz/tq?tqx=out:csv';
-    let menuData = [], cart = {}, mapsLink = "Not Shared";
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1y4tXP_8SZ_iUHYcl7vA6gq72zILeEoVHCuSOXyi2ubo/gviz/tq?tqx=out:csv';
+    let menuData = [], cart = {}, autoMapsLink = "";
 
     async function loadMenu() {
-        const response = await fetch(URL);
-        const data = await response.text();
-        const rows = data.split('\n').slice(1);
-        menuData = rows.map(row => {
-            const cols = row.split('","').map(c => c.replace(/"/g, '').trim());
-            if(cols[0]) {
-                return { name: cols[0], price: parseInt(cols[1]) || 0, img: cols[2], cat: cols[3] || "General" };
-            }
-        }).filter(Boolean);
-        renderMenu(menuData);
+        try {
+            const response = await fetch(SHEET_URL);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1);
+            menuData = rows.map(row => {
+                const cols = row.split('","').map(c => c.replace(/"/g, '').trim());
+                if(cols[0]) { return { name: cols[0], price: parseInt(cols[1]) || 0, img: cols[2] }; }
+            }).filter(Boolean);
+            renderMenu(menuData);
+        } catch (e) { console.error("Error", e); }
     }
 
     function renderMenu(items) {
@@ -110,7 +120,7 @@
                 <div class="item-info"><span class="item-name">${item.name}</span><span class="price">₹${item.price}</span></div>
                 <div class="qty-box">
                     <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},-1)">-</button>
-                    <span id="q-${cleanId}" style="width:20px;text-align:center;font-weight:bold;">${q}</span>
+                    <span id="q-${cleanId}" style="width:25px;text-align:center;font-weight:bold;">${q}</span>
                     <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},1)">+</button>
                 </div>
             </div>`;
@@ -140,30 +150,26 @@
         renderMenu(filtered);
     }
 
-    // --- Delivery Logic ---
     function openForm() {
         let total = document.getElementById('total-val').innerText;
-        if(total == "0") return alert("Please add items first!");
-        
-        let summary = "<b>Your Order:</b><br>";
-        for(let key in cart) {
-            if(cart[key].qty > 0) summary += `${key} x ${cart[key].qty}<br>`;
-        }
-        document.getElementById('order-summary').innerHTML = summary + `<br><b>Total: ₹${total}</b>`;
+        if(total == "0") return alert("Please select items first.");
+        let summary = "<b>Order Summary:</b><br>";
+        for(let key in cart) { if(cart[key].qty > 0) summary += `• ${key} x ${cart[key].qty}<br>`; }
+        document.getElementById('order-summary').innerHTML = summary + `<br><b>Amount: ₹${total}</b>`;
         document.getElementById('delivery-form').style.display = 'block';
     }
 
     function closeForm() { document.getElementById('delivery-form').style.display = 'none'; }
 
     function getLocation() {
-        document.getElementById('loc-status').innerText = "Locating...";
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(p => {
-                mapsLink = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                document.getElementById('loc-status').innerText = "✅ Location Captured!";
+                autoMapsLink = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+                document.getElementById('manual-map-link').value = autoMapsLink;
+                document.getElementById('map-btn').innerText = "✅ GPS ATTACHED";
+                document.getElementById('map-btn').style.background = "#2ecc71";
             }, () => {
-                alert("Please allow location access.");
-                document.getElementById('loc-status').innerText = "❌ Access Denied";
+                alert("GPS failed. Please open Maps manually and paste the link.");
             });
         }
     }
@@ -174,19 +180,25 @@
     }
 
     function finalizeOrder() {
-        let name = document.getElementById('cust-name').value;
-        let addr = document.getElementById('cust-addr').value;
-        let txn = document.getElementById('txn-id').value;
+        let name = document.getElementById('cust-name').value.trim();
+        let hno = document.getElementById('house-no').value.trim();
+        let area = document.getElementById('area').value.trim();
+        let lmark = document.getElementById('landmark').value.trim();
+        let mapLink = document.getElementById('manual-map-link').value.trim();
+        let txn = document.getElementById('txn-id').value.trim();
         let total = document.getElementById('total-val').innerText;
 
-        if(!name || !addr || !txn) return alert("Please fill Name, Address and Payment ID!");
+        if(!name || !hno || !area || !lmark) return alert("❌ Error: All Name and Address fields are required.");
+        if(!mapLink) return alert("❌ Error: Please attach or paste Google Maps Location link.");
+        if(txn.length < 10) return alert("❌ Error: Valid 12-digit Payment Reference ID required.");
 
-        let msg = `🏠 *NEW DELIVERY ORDER*%0A--------------------------%0A`;
-        msg += `👤 *Customer:* ${name}%0A📍 *Address:* ${addr}%0A🌍 *Maps:* ${mapsLink}%0A--------------------------%0A*Items:*%0A`;
+        let msg = `*OFFICIAL DELIVERY ORDER*%0A--------------------------%0A`;
+        msg += `👤 *Customer:* ${name}%0A🏠 *House:* ${hno}%0A📍 *Area:* ${area}%0A🏢 *Landmark:* ${lmark}%0A🌍 *Location:* ${mapLink}%0A--------------------------%0A*Items:*%0A`;
         for(let key in cart) {
-            if(cart[key].qty > 0) msg += `🔹 ${key} x ${cart[key].qty}%0A`;
+            if(cart[key].qty > 0) msg += `🔹 ${key} x ${cart[key].qty} = ₹${cart[key].qty * cart[key].price}%0A`;
         }
-        msg += `--------------------------%0A💰 *TOTAL PAID: ₹${total}*%0A🆔 *TXN ID:* ${txn}`;
+        msg += `--------------------------%0A💰 *TOTAL PAID: ₹${total}*%0A🆔 *PAYMENT REF:* ${txn}%0A--------------------------%0A`;
+        msg += `✅ *MERCHANT:* Verify Payment before dispatch.`;
         
         window.open(`https://wa.me/919474029463?text=${msg}`);
     }
