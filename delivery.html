@@ -1,280 +1,280 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOME DELIVERY - MY RESTAURANT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            margin: 0; font-family: 'Poppins', sans-serif; color: #fff;
-            background: url('https://i.postimg.cc/fTv7fhX9/Black-Beige-Elegant-Fancy-Restaurant-Menu-20260218-115517-0000.png') no-repeat center center fixed;
-            background-size: cover;
-        }
-        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: -1; }
-        
-        .header { display: flex; align-items: center; padding: 15px; background: rgba(0,0,0,0.9); border-bottom: 2px solid #f1c40f; position: sticky; top: 0; z-index: 100; }
-        .logo { width: 50px; height: 50px; border-radius: 50%; border: 1.5px solid #f1c40f; margin-right: 15px; }
-        .res-title { font-size: 18px; color:#f1c40f; font-weight: bold; text-transform: uppercase; }
-        
-        /* Category Section */
-        .category-scroll { 
-            display: flex; overflow-x: auto; background: rgba(0,0,0,0.9); 
-            padding: 10px; gap: 10px; position: sticky; top: 82px; z-index: 99;
-            border-bottom: 1px solid #333; scrollbar-width: none;
-        }
-        .category-scroll::-webkit-scrollbar { display: none; }
-        .cat-btn { 
-            background: #222; color: #fff; border: 1px solid #f1c40f; 
-            padding: 8px 20px; border-radius: 20px; white-space: nowrap; 
-            cursor: pointer; font-size: 13px; font-weight: 600;
-        }
-        .cat-btn.active { background: #f1c40f; color: #000; }
-
-        .search-area { background: rgba(20,20,20,0.95); padding: 15px; position: sticky; top: 138px; z-index: 98; border-bottom: 1px solid #333; }
-        #search-box { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; outline: none; }
-        
-        .menu-container { padding: 15px; padding-bottom: 220px; max-width: 600px; margin: 0 auto; }
-        
-        /* Updated Card for Description */
-        .item-card { background: rgba(255,255,255,0.08); margin-bottom: 15px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
-        .item-main { display: flex; align-items: center; cursor: pointer; }
-        .item-img { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; margin-right: 15px; }
-        .item-info { flex: 1; }
-        .item-name { font-weight: 600; font-size: 16px; color: #fff; display: block; }
-        .price { color: #f1c40f; font-weight: bold; font-size: 17px; }
-        
-        /* Description Styling */
-        .item-desc { display: none; padding: 10px; background: rgba(241, 196, 15, 0.1); border-radius: 8px; margin-top: 10px; font-size: 13px; color: #ddd; border-left: 3px solid #f1c40f; }
-        .arrow-icon { color: #f1c40f; font-size: 12px; margin-left: 5px; transition: 0.3s; display: inline-block; }
-
-        .qty-box { display: flex; align-items: center; background: #f1c40f; color: #000; border-radius: 6px; padding: 2px 8px; height: 32px; }
-        .qty-btn { background: none; border: none; font-weight: bold; font-size: 20px; cursor: pointer; padding: 0 8px; }
-
-        .footer { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 20px; border-top: 2px solid #f1c40f; box-sizing: border-box; z-index: 101; }
-        .order-btn { background: #25d366; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase; }
-        
-        #delivery-form { display: none; background: rgba(0,0,0,0.98); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .input-field { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #f1c40f; background: #111; color: #fff; font-family: 'Poppins'; box-sizing: border-box;}
-        .warning-box { background: #d9534f; color: white; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 11px; }
-        .btn-pay { background: #f39c12; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; margin: 10px 0; cursor: pointer; text-transform: uppercase; }
-        .btn-map { background: #3498db; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 5px; cursor: pointer; font-weight: bold; font-size: 12px; }
-    </style>
-</head>
-<body>
-
-<div class="header">
-    <img src="https://i.postimg.cc/Cx1hrjZn/Black-White-Minimalist-Professional-Initial-Logo-20260215-161109-0000.png" class="logo">
-    <div class="res-title">MY RESTAURANT | HOME DELIVERY</div>
-</div>
-
-<div class="category-scroll" id="cat-tabs">
-    <button class="cat-btn active" onclick="filterCat('All', this)">All Items</button>
-</div>
-
-<div class="search-area">
-    <input type="text" id="search-box" placeholder="🔍 Search menu items..." onkeyup="runFilter()">
-</div>
-
-<div id="menu-display" class="menu-container"></div>
-
-<div id="delivery-form">
-    <h2 style="color:#f1c40f; text-align:center; margin-bottom:10px;">DELIVERY DETAILS</h2>
-    <div class="warning-box">MANDATORY: ATTACH LOCATION & COMPLETE ADDRESS</div>
-    
-    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px solid #333;">
-        <p id="order-summary" style="font-size: 14px; border-bottom: 1px solid #333; padding-bottom: 10px; color: #bbb;"></p>
-        
-        <input type="text" id="cust-name" class="input-field" placeholder="Customer Full Name">
-        
-        <p style="font-size: 13px; color: #f1c40f; margin: 15px 0 5px 0;">Step 1: Set Delivery Location</p>
-        <button class="btn-map" id="map-btn" onclick="getLocation()">📍 AUTO-DETECT GPS LOCATION</button>
-        <button class="btn-map" style="background:#6c757d;" onclick="window.open('https://maps.google.com')">🗺️ OPEN MAPS TO COPY LINK</button>
-        <input type="text" id="manual-map-link" class="input-field" placeholder="Paste Google Maps Link Here (Required)">
-        
-        <div style="display: flex; gap: 8px;">
-            <input type="text" id="house-no" class="input-field" placeholder="House No." style="flex: 1;">
-            <input type="text" id="area" class="input-field" placeholder="Area/City" style="flex: 2;">
-        </div>
-        <input type="text" id="street-address" class="input-field" placeholder="Full Address / Road Name (e.g. GT Road)">
-        <input type="text" id="landmark" class="input-field" placeholder="Landmark (Required)">
-        
-        <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 10px;">
-            <p style="font-size: 13px; color: #f1c40f; margin-bottom: 5px;">Step 2: Digital Payment</p>
-            <button class="btn-pay" onclick="payNow()">📱 PAY VIA UPI (rprohit011@ybl)</button>
-            <input type="text" id="txn-id" class="input-field" placeholder="Enter 12-Digit Reference/UTR ID">
-        </div>
-
-        <button class="order-btn" style="margin-top: 20px;" onclick="finalizeOrder()">PLACE ORDER ON WHATSAPP</button>
-        <button class="btn-pay" style="background: #444; margin-top: 10px;" onclick="closeForm()">RETURN TO MENU</button>
-    </div>
-</div>
-
-<div class="footer">
-    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <span style="color:#f1c40f; font-weight: bold; font-size: 13px;">HOME DELIVERY MODE</span>
-        <span>Total: <b style="color:#f1c40f; font-size:22px;">₹<span id="total-val">0</span></b></span>
-    </div>
-    <button class="order-btn" onclick="openForm()">PROCEED TO CHECKOUT ➡️</button>
-</div>
-
-<script>
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1y4tXP_8SZ_iUHYcl7vA6gq72zILeEoVHCuSOXyi2ubo/gviz/tq?tqx=out:csv';
-    let menuData = [], cart = {}, currentCat = "All";
-
-    async function loadMenu() {
-        try {
-            const response = await fetch(SHEET_URL);
-            const data = await response.text();
-            const rows = data.split('\n').slice(1);
-            const categories = new Set();
-
-            menuData = rows.map(row => {
-                const cols = row.split('","').map(c => c.replace(/"/g, '').trim());
-                if(cols[0]) { 
-                    if(cols[3]) categories.add(cols[3]);
-                    return { 
-                        name: cols[0], 
-                        price: parseInt(cols[1]) || 0, 
-                        img: cols[2], 
-                        cat: cols[3] || "General",
-                        desc: cols[4] || "Delicious fresh preparation." // Column E
-                    }; 
-                }
-            }).filter(Boolean);
-
-            const catContainer = document.getElementById('cat-tabs');
-            categories.forEach(cat => {
-                catContainer.innerHTML += `<button class="cat-btn" onclick="filterCat('${cat}', this)">${cat}</button>`;
-            });
-
-            renderMenu(menuData);
-        } catch (e) { console.error("Error", e); }
-    }
-
-    function filterCat(cat, btn) {
-        currentCat = cat;
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        runFilter();
-    }
-
-    function renderMenu(items) {
-        let html = '';
-        items.forEach(item => {
-            let cleanId = item.name.replace(/[^a-zA-Z0-9]/g, "");
-            let q = cart[item.name] ? cart[item.name].qty : 0;
-            html += `
-            <div class="item-card">
-                <div class="item-main" onclick="toggleDesc('${cleanId}')">
-                    <img src="${item.img}" class="item-img" onerror="this.src='https://via.placeholder.com/80'">
-                    <div class="item-info">
-                        <span class="item-name">${item.name} <span id="arrow-${cleanId}" class="arrow-icon">▼</span></span>
-                        <span class="price">₹${item.price}</span>
-                    </div>
-                    <div class="qty-box" onclick="event.stopPropagation()">
-                        <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},-1)">-</button>
-                        <span id="q-${cleanId}" style="width:25px;text-align:center;font-weight:bold;">${q}</span>
-                        <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},1)">+</button>
-                    </div>
-                </div>
-                <div id="desc-${cleanId}" class="item-desc">${item.desc}</div>
-            </div>`;
-        });
-        document.getElementById('menu-display').innerHTML = html;
-    }
-
-    function toggleDesc(id) {
-        let d = document.getElementById('desc-' + id);
-        let a = document.getElementById('arrow-' + id);
-        if (d.style.display === "block") {
-            d.style.display = "none";
-            a.style.transform = "rotate(0deg)";
-        } else {
-            d.style.display = "block";
-            a.style.transform = "rotate(180deg)";
-        }
-    }
-
-    function runFilter() {
-        const s = document.getElementById('search-box').value.toLowerCase();
-        let filtered = menuData;
-        if(currentCat !== "All") filtered = filtered.filter(i => i.cat === currentCat);
-        filtered = filtered.filter(i => i.name.toLowerCase().includes(s));
-        renderMenu(filtered);
-    }
-
-    function changeQty(name, price, delta) {
-        if(!cart[name]) cart[name] = {qty:0, price:price};
-        cart[name].qty += delta;
-        if(cart[name].qty < 0) cart[name].qty = 0;
-        let cleanId = name.replace(/[^a-zA-Z0-9]/g, "");
-        let qElem = document.getElementById('q-'+cleanId);
-        if(qElem) qElem.innerText = cart[name].qty;
-        updateTotal();
-    }
-
-    function updateTotal() {
-        let total = 0;
-        for(let key in cart) total += cart[key].qty * cart[key].price;
-        document.getElementById('total-val').innerText = total;
-    }
-
-    function openForm() {
-        let total = document.getElementById('total-val').innerText;
-        if(total == "0") return alert("Please select items.");
-        let summary = "<b>Order Summary:</b><br>";
-        for(let key in cart) { if(cart[key].qty > 0) summary += `• ${key} x ${cart[key].qty}<br>`; }
-        document.getElementById('order-summary').innerHTML = summary + `<br><b>Amount: ₹${total}</b>`;
-        document.getElementById('delivery-form').style.display = 'block';
-    }
-
-    function closeForm() { document.getElementById('delivery-form').style.display = 'none'; }
-
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(p => {
-                let link = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                document.getElementById('manual-map-link').value = link;
-                document.getElementById('map-btn').innerText = "✅ GPS ATTACHED";
-                document.getElementById('map-btn').style.background = "#2ecc71";
-            }, () => { alert("GPS failed. Please paste link manually."); });
-        }
-    }
-
-    function payNow() {
-        let total = document.getElementById('total-val').innerText;
-        window.location.href = `upi://pay?pa=rprohit011@ybl&pn=VikasRestaurant&am=${total}&cu=INR`;
-    }
-
-    function finalizeOrder() {
-        let name = document.getElementById('cust-name').value.trim();
-        let hno = document.getElementById('house-no').value.trim();
-        let area = document.getElementById('area').value.trim();
-        let street = document.getElementById('street-address').value.trim();
-        let lmark = document.getElementById('landmark').value.trim();
-        let mapLink = document.getElementById('manual-map-link').value.trim();
-        let txn = document.getElementById('txn-id').value.trim();
-        let total = document.getElementById('total-val').innerText;
-
-        if(!name || !hno || !area || !street || !lmark || !mapLink || txn.length < 10) {
-            return alert("❌ Error: All fields and valid Payment ID are mandatory.");
-        }
-
-        let msg = `*OFFICIAL HOME DELIVERY ORDER*%0A--------------------------%0A`;
-        msg += `👤 *Customer:* ${name}%0A🏠 *House No:* ${hno}%0A📍 *Area/City:* ${area}%0A🛣️ *Address:* ${street}%0A🏢 *Landmark:* ${lmark}%0A🌍 *Location:* ${mapLink}%0A--------------------------%0A*Items:*%0A`;
-        
-        for(let key in cart) { 
-            if(cart[key].qty > 0) msg += `🔹 ${key} x ${cart[key].qty} = ₹${cart[key].qty * cart[key].price}%0A`; 
-        }
-
-        msg += `--------------------------%0A💰 *TOTAL PAID: ₹${total}*%0A🆔 *PAYMENT REF:* ${txn}%0A--------------------------%0A`;
-        msg += `✅ *Note:* Order will be processed after payment confirmation.`;
-        
-        window.open(`https://wa.me/919474029463?text=${msg}`);
-    }
-
-    loadMenu();
-</script>
-</body>
-</html>
+‎<!DOCTYPE html>
+‎<html lang="en">
+‎<head>
+‎    <meta charset="UTF-8">
+‎    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+‎    <title>HOME DELIVERY - MY RESTAURANT</title>
+‎    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+‎    <style>
+‎        body { 
+‎            margin: 0; font-family: 'Poppins', sans-serif; color: #fff;
+‎            background: url('https://i.postimg.cc/fTv7fhX9/Black-Beige-Elegant-Fancy-Restaurant-Menu-20260218-115517-0000.png') no-repeat center center fixed;
+‎            background-size: cover;
+‎        }
+‎        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: -1; }
+‎        
+‎        .header { display: flex; align-items: center; padding: 15px; background: rgba(0,0,0,0.9); border-bottom: 2px solid #f1c40f; position: sticky; top: 0; z-index: 100; }
+‎        .logo { width: 50px; height: 50px; border-radius: 50%; border: 1.5px solid #f1c40f; margin-right: 15px; }
+‎        .res-title { font-size: 18px; color:#f1c40f; font-weight: bold; text-transform: uppercase; }
+‎        
+‎        /* Category Section */
+‎        .category-scroll { 
+‎            display: flex; overflow-x: auto; background: rgba(0,0,0,0.9); 
+‎            padding: 10px; gap: 10px; position: sticky; top: 82px; z-index: 99;
+‎            border-bottom: 1px solid #333; scrollbar-width: none;
+‎        }
+‎        .category-scroll::-webkit-scrollbar { display: none; }
+‎        .cat-btn { 
+‎            background: #222; color: #fff; border: 1px solid #f1c40f; 
+‎            padding: 8px 20px; border-radius: 20px; white-space: nowrap; 
+‎            cursor: pointer; font-size: 13px; font-weight: 600;
+‎        }
+‎        .cat-btn.active { background: #f1c40f; color: #000; }
+‎
+‎        .search-area { background: rgba(20,20,20,0.95); padding: 15px; position: sticky; top: 138px; z-index: 98; border-bottom: 1px solid #333; }
+‎        #search-box { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; outline: none; }
+‎        
+‎        .menu-container { padding: 15px; padding-bottom: 220px; max-width: 600px; margin: 0 auto; }
+‎        
+‎        /* Updated Card for Description */
+‎        .item-card { background: rgba(255,255,255,0.08); margin-bottom: 15px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+‎        .item-main { display: flex; align-items: center; cursor: pointer; }
+‎        .item-img { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; margin-right: 15px; }
+‎        .item-info { flex: 1; }
+‎        .item-name { font-weight: 600; font-size: 16px; color: #fff; display: block; }
+‎        .price { color: #f1c40f; font-weight: bold; font-size: 17px; }
+‎        
+‎        /* Description Styling */
+‎        .item-desc { display: none; padding: 10px; background: rgba(241, 196, 15, 0.1); border-radius: 8px; margin-top: 10px; font-size: 13px; color: #ddd; border-left: 3px solid #f1c40f; }
+‎        .arrow-icon { color: #f1c40f; font-size: 12px; margin-left: 5px; transition: 0.3s; display: inline-block; }
+‎
+‎        .qty-box { display: flex; align-items: center; background: #f1c40f; color: #000; border-radius: 6px; padding: 2px 8px; height: 32px; }
+‎        .qty-btn { background: none; border: none; font-weight: bold; font-size: 20px; cursor: pointer; padding: 0 8px; }
+‎
+‎        .footer { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 20px; border-top: 2px solid #f1c40f; box-sizing: border-box; z-index: 101; }
+‎        .order-btn { background: #25d366; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase; }
+‎        
+‎        #delivery-form { display: none; background: rgba(0,0,0,0.98); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+‎        .input-field { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #f1c40f; background: #111; color: #fff; font-family: 'Poppins'; box-sizing: border-box;}
+‎        .warning-box { background: #d9534f; color: white; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 11px; }
+‎        .btn-pay { background: #f39c12; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; margin: 10px 0; cursor: pointer; text-transform: uppercase; }
+‎        .btn-map { background: #3498db; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 5px; cursor: pointer; font-weight: bold; font-size: 12px; }
+‎    </style>
+‎</head>
+‎<body>
+‎
+‎<div class="header">
+‎    <img src="https://i.postimg.cc/Cx1hrjZn/Black-White-Minimalist-Professional-Initial-Logo-20260215-161109-0000.png" class="logo">
+‎    <div class="res-title">MY RESTAURANT | HOME DELIVERY</div>
+‎</div>
+‎
+‎<div class="category-scroll" id="cat-tabs">
+‎    <button class="cat-btn active" onclick="filterCat('All', this)">All Items</button>
+‎</div>
+‎
+‎<div class="search-area">
+‎    <input type="text" id="search-box" placeholder="🔍 Search menu items..." onkeyup="runFilter()">
+‎</div>
+‎
+‎<div id="menu-display" class="menu-container"></div>
+‎
+‎<div id="delivery-form">
+‎    <h2 style="color:#f1c40f; text-align:center; margin-bottom:10px;">DELIVERY DETAILS</h2>
+‎    <div class="warning-box">MANDATORY: ATTACH LOCATION & COMPLETE ADDRESS</div>
+‎    
+‎    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px solid #333;">
+‎        <p id="order-summary" style="font-size: 14px; border-bottom: 1px solid #333; padding-bottom: 10px; color: #bbb;"></p>
+‎        
+‎        <input type="text" id="cust-name" class="input-field" placeholder="Customer Full Name">
+‎        
+‎        <p style="font-size: 13px; color: #f1c40f; margin: 15px 0 5px 0;">Step 1: Set Delivery Location</p>
+‎        <button class="btn-map" id="map-btn" onclick="getLocation()">📍 AUTO-DETECT GPS LOCATION</button>
+‎        <button class="btn-map" style="background:#6c757d;" onclick="window.open('https://maps.google.com')">🗺️ OPEN MAPS TO COPY LINK</button>
+‎        <input type="text" id="manual-map-link" class="input-field" placeholder="Paste Google Maps Link Here (Required)">
+‎        
+‎        <div style="display: flex; gap: 8px;">
+‎            <input type="text" id="house-no" class="input-field" placeholder="House No." style="flex: 1;">
+‎            <input type="text" id="area" class="input-field" placeholder="Area/City" style="flex: 2;">
+‎        </div>
+‎        <input type="text" id="street-address" class="input-field" placeholder="Full Address / Road Name (e.g. GT Road)">
+‎        <input type="text" id="landmark" class="input-field" placeholder="Landmark (Required)">
+‎        
+‎        <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 10px;">
+‎            <p style="font-size: 13px; color: #f1c40f; margin-bottom: 5px;">Step 2: Digital Payment</p>
+‎            <button class="btn-pay" onclick="payNow()">📱 PAY VIA UPI (rprohit011@ybl)</button>
+‎            <input type="text" id="txn-id" class="input-field" placeholder="Enter 12-Digit Reference/UTR ID">
+‎        </div>
+‎
+‎        <button class="order-btn" style="margin-top: 20px;" onclick="finalizeOrder()">PLACE ORDER ON WHATSAPP</button>
+‎        <button class="btn-pay" style="background: #444; margin-top: 10px;" onclick="closeForm()">RETURN TO MENU</button>
+‎    </div>
+‎</div>
+‎
+‎<div class="footer">
+‎    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+‎        <span style="color:#f1c40f; font-weight: bold; font-size: 13px;">HOME DELIVERY MODE</span>
+‎        <span>Total: <b style="color:#f1c40f; font-size:22px;">₹<span id="total-val">0</span></b></span>
+‎    </div>
+‎    <button class="order-btn" onclick="openForm()">PROCEED TO CHECKOUT ➡️</button>
+‎</div>
+‎
+‎<script>
+‎    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1y4tXP_8SZ_iUHYcl7vA6gq72zILeEoVHCuSOXyi2ubo/gviz/tq?tqx=out:csv';
+‎    let menuData = [], cart = {}, currentCat = "All";
+‎
+‎    async function loadMenu() {
+‎        try {
+‎            const response = await fetch(SHEET_URL);
+‎            const data = await response.text();
+‎            const rows = data.split('\n').slice(1);
+‎            const categories = new Set();
+‎
+‎            menuData = rows.map(row => {
+‎                const cols = row.split('","').map(c => c.replace(/"/g, '').trim());
+‎                if(cols[0]) { 
+‎                    if(cols[3]) categories.add(cols[3]);
+‎                    return { 
+‎                        name: cols[0], 
+‎                        price: parseInt(cols[1]) || 0, 
+‎                        img: cols[2], 
+‎                        cat: cols[3] || "General",
+‎                        desc: cols[4] || "Delicious fresh preparation." // Column E
+‎                    }; 
+‎                }
+‎            }).filter(Boolean);
+‎
+‎            const catContainer = document.getElementById('cat-tabs');
+‎            categories.forEach(cat => {
+‎                catContainer.innerHTML += `<button class="cat-btn" onclick="filterCat('${cat}', this)">${cat}</button>`;
+‎            });
+‎
+‎            renderMenu(menuData);
+‎        } catch (e) { console.error("Error", e); }
+‎    }
+‎
+‎    function filterCat(cat, btn) {
+‎        currentCat = cat;
+‎        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+‎        btn.classList.add('active');
+‎        runFilter();
+‎    }
+‎
+‎    function renderMenu(items) {
+‎        let html = '';
+‎        items.forEach(item => {
+‎            let cleanId = item.name.replace(/[^a-zA-Z0-9]/g, "");
+‎            let q = cart[item.name] ? cart[item.name].qty : 0;
+‎            html += `
+‎            <div class="item-card">
+‎                <div class="item-main" onclick="toggleDesc('${cleanId}')">
+‎                    <img src="${item.img}" class="item-img" onerror="this.src='https://via.placeholder.com/80'">
+‎                    <div class="item-info">
+‎                        <span class="item-name">${item.name} <span id="arrow-${cleanId}" class="arrow-icon">▼</span></span>
+‎                        <span class="price">₹${item.price}</span>
+‎                    </div>
+‎                    <div class="qty-box" onclick="event.stopPropagation()">
+‎                        <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},-1)">-</button>
+‎                        <span id="q-${cleanId}" style="width:25px;text-align:center;font-weight:bold;">${q}</span>
+‎                        <button class="qty-btn" onclick="changeQty('${item.name}',${item.price},1)">+</button>
+‎                    </div>
+‎                </div>
+‎                <div id="desc-${cleanId}" class="item-desc">${item.desc}</div>
+‎            </div>`;
+‎        });
+‎        document.getElementById('menu-display').innerHTML = html;
+‎    }
+‎
+‎    function toggleDesc(id) {
+‎        let d = document.getElementById('desc-' + id);
+‎        let a = document.getElementById('arrow-' + id);
+‎        if (d.style.display === "block") {
+‎            d.style.display = "none";
+‎            a.style.transform = "rotate(0deg)";
+‎        } else {
+‎            d.style.display = "block";
+‎            a.style.transform = "rotate(180deg)";
+‎        }
+‎    }
+‎
+‎    function runFilter() {
+‎        const s = document.getElementById('search-box').value.toLowerCase();
+‎        let filtered = menuData;
+‎        if(currentCat !== "All") filtered = filtered.filter(i => i.cat === currentCat);
+‎        filtered = filtered.filter(i => i.name.toLowerCase().includes(s));
+‎        renderMenu(filtered);
+‎    }
+‎
+‎    function changeQty(name, price, delta) {
+‎        if(!cart[name]) cart[name] = {qty:0, price:price};
+‎        cart[name].qty += delta;
+‎        if(cart[name].qty < 0) cart[name].qty = 0;
+‎        let cleanId = name.replace(/[^a-zA-Z0-9]/g, "");
+‎        let qElem = document.getElementById('q-'+cleanId);
+‎        if(qElem) qElem.innerText = cart[name].qty;
+‎        updateTotal();
+‎    }
+‎
+‎    function updateTotal() {
+‎        let total = 0;
+‎        for(let key in cart) total += cart[key].qty * cart[key].price;
+‎        document.getElementById('total-val').innerText = total;
+‎    }
+‎
+‎    function openForm() {
+‎        let total = document.getElementById('total-val').innerText;
+‎        if(total == "0") return alert("Please select items.");
+‎        let summary = "<b>Order Summary:</b><br>";
+‎        for(let key in cart) { if(cart[key].qty > 0) summary += `• ${key} x ${cart[key].qty}<br>`; }
+‎        document.getElementById('order-summary').innerHTML = summary + `<br><b>Amount: ₹${total}</b>`;
+‎        document.getElementById('delivery-form').style.display = 'block';
+‎    }
+‎
+‎    function closeForm() { document.getElementById('delivery-form').style.display = 'none'; }
+‎
+‎    function getLocation() {
+‎        if (navigator.geolocation) {
+‎            navigator.geolocation.getCurrentPosition(p => {
+‎                let link = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+‎                document.getElementById('manual-map-link').value = link;
+‎                document.getElementById('map-btn').innerText = "✅ GPS ATTACHED";
+‎                document.getElementById('map-btn').style.background = "#2ecc71";
+‎            }, () => { alert("GPS failed. Please paste link manually."); });
+‎        }
+‎    }
+‎
+‎    function payNow() {
+‎        let total = document.getElementById('total-val').innerText;
+‎        window.location.href = `upi://pay?pa=rprohit011@ybl&pn=VikasRestaurant&am=${total}&cu=INR`;
+‎    }
+‎
+‎    function finalizeOrder() {
+‎        let name = document.getElementById('cust-name').value.trim();
+‎        let hno = document.getElementById('house-no').value.trim();
+‎        let area = document.getElementById('area').value.trim();
+‎        let street = document.getElementById('street-address').value.trim();
+‎        let lmark = document.getElementById('landmark').value.trim();
+‎        let mapLink = document.getElementById('manual-map-link').value.trim();
+‎        let txn = document.getElementById('txn-id').value.trim();
+‎        let total = document.getElementById('total-val').innerText;
+‎
+‎        if(!name || !hno || !area || !street || !lmark || !mapLink || txn.length < 10) {
+‎            return alert("❌ Error: All fields and valid Payment ID are mandatory.");
+‎        }
+‎
+‎        let msg = `*OFFICIAL HOME DELIVERY ORDER*%0A--------------------------%0A`;
+‎        msg += `👤 *Customer:* ${name}%0A🏠 *House No:* ${hno}%0A📍 *Area/City:* ${area}%0A🛣️ *Address:* ${street}%0A🏢 *Landmark:* ${lmark}%0A🌍 *Location:* ${mapLink}%0A--------------------------%0A*Items:*%0A`;
+‎        
+‎        for(let key in cart) { 
+‎            if(cart[key].qty > 0) msg += `🔹 ${key} x ${cart[key].qty} = ₹${cart[key].qty * cart[key].price}%0A`; 
+‎        }
+‎
+‎        msg += `--------------------------%0A💰 *TOTAL PAID: ₹${total}*%0A🆔 *PAYMENT REF:* ${txn}%0A--------------------------%0A`;
+‎        msg += `✅ *Note:* Order will be processed after payment confirmation.`;
+‎        
+‎        window.open(`https://wa.me/919474029463?text=${msg}`);
+‎    }
+‎
+‎    loadMenu();
+‎</script>
+‎</body>
+‎</html>
