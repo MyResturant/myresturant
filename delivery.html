@@ -17,7 +17,7 @@
         .logo { width: 50px; height: 50px; border-radius: 50%; border: 1.5px solid #f1c40f; margin-right: 15px; }
         .res-title { font-size: 18px; color:#f1c40f; font-weight: bold; text-transform: uppercase; }
         
-        /* Category Styling */
+        /* Category Section */
         .category-scroll { 
             display: flex; overflow-x: auto; background: rgba(0,0,0,0.9); 
             padding: 10px; gap: 10px; position: sticky; top: 82px; z-index: 99;
@@ -83,19 +83,18 @@
         <p style="font-size: 13px; color: #f1c40f; margin: 15px 0 5px 0;">Step 1: Set Delivery Location</p>
         <button class="btn-map" id="map-btn" onclick="getLocation()">📍 AUTO-DETECT GPS LOCATION</button>
         <button class="btn-map" style="background:#6c757d;" onclick="window.open('https://www.google.com/maps')">🗺️ OPEN MAPS TO COPY LINK</button>
-        
         <input type="text" id="manual-map-link" class="input-field" placeholder="Paste Google Maps Link Here (Required)">
         
         <div style="display: flex; gap: 8px;">
             <input type="text" id="house-no" class="input-field" placeholder="House No." style="flex: 1;">
-            <input type="text" id="area" class="input-field" placeholder="Area / City" style="flex: 2;">
+            <input type="text" id="area" class="input-field" placeholder="Area/City" style="flex: 2;">
         </div>
         <input type="text" id="street-address" class="input-field" placeholder="Full Address / Road Name (e.g. GT Road)">
         <input type="text" id="landmark" class="input-field" placeholder="Landmark (Required)">
         
         <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 10px;">
             <p style="font-size: 13px; color: #f1c40f; margin-bottom: 5px;">Step 2: Digital Payment</p>
-            <button class="btn-pay" onclick="payNow()">📱 PAY TOTAL VIA UPI</button>
+            <button class="btn-pay" onclick="payNow()">📱 PAY VIA UPI (rprohit011@ybl)</button>
             <input type="text" id="txn-id" class="input-field" placeholder="Enter 12-Digit Reference/UTR ID">
         </div>
 
@@ -126,15 +125,14 @@
             menuData = rows.map(row => {
                 const cols = row.split('","').map(c => c.replace(/"/g, '').trim());
                 if(cols[0]) { 
-                    categories.add(cols[3]); // Column 4 (D) is Category
-                    return { name: cols[0], price: parseInt(cols[1]) || 0, img: cols[2], cat: cols[3] }; 
+                    if(cols[3]) categories.add(cols[3]);
+                    return { name: cols[0], price: parseInt(cols[1]) || 0, img: cols[2], cat: cols[3] || "General" }; 
                 }
             }).filter(Boolean);
 
-            // Add Category Buttons
             const catContainer = document.getElementById('cat-tabs');
             categories.forEach(cat => {
-                if(cat) catContainer.innerHTML += `<button class="cat-btn" onclick="filterCat('${cat}', this)">${cat}</button>`;
+                catContainer.innerHTML += `<button class="cat-btn" onclick="filterCat('${cat}', this)">${cat}</button>`;
             });
 
             renderMenu(menuData);
@@ -169,9 +167,7 @@
     function runFilter() {
         const s = document.getElementById('search-box').value.toLowerCase();
         let filtered = menuData;
-        if(currentCat !== "All") {
-            filtered = filtered.filter(i => i.cat === currentCat);
-        }
+        if(currentCat !== "All") filtered = filtered.filter(i => i.cat === currentCat);
         filtered = filtered.filter(i => i.name.toLowerCase().includes(s));
         renderMenu(filtered);
     }
@@ -197,7 +193,7 @@
         if(total == "0") return alert("Please select items.");
         let summary = "<b>Order Summary:</b><br>";
         for(let key in cart) { if(cart[key].qty > 0) summary += `• ${key} x ${cart[key].qty}<br>`; }
-        document.getElementById('order-summary').innerHTML = summary + `<br><b>Payable: ₹${total}</b>`;
+        document.getElementById('order-summary').innerHTML = summary + `<br><b>Amount: ₹${total}</b>`;
         document.getElementById('delivery-form').style.display = 'block';
     }
 
@@ -210,7 +206,7 @@
                 document.getElementById('manual-map-link').value = link;
                 document.getElementById('map-btn').innerText = "✅ GPS ATTACHED";
                 document.getElementById('map-btn').style.background = "#2ecc71";
-            }, () => { alert("GPS failed."); });
+            }, () => { alert("GPS failed. Please paste link manually."); });
         }
     }
 
@@ -230,12 +226,18 @@
         let total = document.getElementById('total-val').innerText;
 
         if(!name || !hno || !area || !street || !lmark || !mapLink || txn.length < 10) {
-            return alert("❌ Error: All fields and 12-digit Payment ID are mandatory.");
+            return alert("❌ Error: All fields and valid Payment ID are mandatory.");
         }
 
-        let msg = `*OFFICIAL HOME DELIVERY ORDER*%0A--------------------------%0A👤 *Customer:* ${name}%0A🏠 *House No:* ${hno}%0A📍 *Area:* ${area}%0A🛣️ *Address:* ${street}%0A🏢 *Landmark:* ${lmark}%0A🌍 *Location:* ${mapLink}%0A--------------------------%0A*Items:*%0A`;
-        for(let key in cart) { if(cart[key].qty > 0) msg += `🔹 ${key} x ${cart[key].qty} = ₹${cart[key].qty * cart[key].price}%0A`; }
-        msg += `--------------------------%0A💰 *TOTAL PAID: ₹${total}*%0A🆔 *PAYMENT REF:* ${txn}%0A--------------------------%0A✅ *STATUS:* Verify Payment.`;
+        let msg = `*OFFICIAL HOME DELIVERY ORDER*%0A--------------------------%0A`;
+        msg += `👤 *Customer:* ${name}%0A🏠 *House No:* ${hno}%0A📍 *Area/City:* ${area}%0A🛣️ *Address:* ${street}%0A🏢 *Landmark:* ${lmark}%0A🌍 *Location:* ${mapLink}%0A--------------------------%0A*Items:*%0A`;
+        
+        for(let key in cart) { 
+            if(cart[key].qty > 0) msg += `🔹 ${key} x ${cart[key].qty} = ₹${cart[key].qty * cart[key].price}%0A`; 
+        }
+
+        msg += `--------------------------%0A💰 *TOTAL PAID: ₹${total}*%0A🆔 *PAYMENT REF:* ${txn}%0A--------------------------%0A`;
+        msg += `✅ *Note:* Order will be processed after payment confirmation.`;
         
         window.open(`https://wa.me/919474029463?text=${msg}`);
     }
