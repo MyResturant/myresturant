@@ -3,56 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery System</title>
+    <title>Professional Home Delivery</title>
     <style>
-        body { font-family: sans-serif; background-color: #121212; color: white; padding: 15px; }
-        .card { background: #1e1e1e; padding: 20px; border-radius: 15px; border: 1px solid #d4af37; }
-        .item-row { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        .btn { background: #d4af37; color: black; padding: 12px; width: 100%; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; background: #333; color: white; }
+        /* Aapka Purana Look */
+        body { font-family: 'Segoe UI', sans-serif; background-color: #121212; color: #f0f0f0; padding: 15px; }
+        .card { background: #1e1e1e; padding: 20px; border-radius: 15px; border: 1px solid #d4af37; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h2 { color: #d4af37; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #333; }
+        .price { color: #d4af37; font-weight: bold; margin-right: 10px; }
+        .add-btn { background: #d4af37; color: black; border: none; padding: 6px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        
+        /* Checkout Page Design */
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #252525; color: white; box-sizing: border-box; }
+        .btn-order { background: #27ae60; color: white; padding: 15px; width: 100%; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .btn-map { background: #3498db; color: white; padding: 10px; width: 100%; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
         #checkoutPage { display: none; }
+        .bill-box { background: #252525; padding: 15px; border-radius: 10px; border: 1px dashed #d4af37; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div id="menuPage">
-    <h2 style="color: #d4af37; text-align: center;">Vikas Delivery Menu</h2>
+    <h2>🏠 Home Delivery</h2>
+    <p style="text-align: center; color: #aaa; font-size: 14px;">Select items and proceed to checkout</p>
+    
     <div class="card">
-        <div class="item-row"><span>Paneer Tikka - ₹250</span><button onclick="addToCart('Paneer Tikka', 250)">Add</button></div>
-        <div class="item-row"><span>Butter Naan - ₹50</span><button onclick="addToCart('Butter Naan', 50)">Add</button></div>
-        <h3 style="text-align: right;">Total: ₹<span id="menuTotal">0</span></h3>
-        <button class="btn" onclick="showCheckout()">Next ➡️</button>
+        <div class="item-row">
+            <span>Paneer Tikka</span>
+            <div><span class="price">₹250</span><button class="add-btn" onclick="addToCart('Paneer Tikka', 250)">Add</button></div>
+        </div>
+        <div class="item-row">
+            <span>Butter Naan</span>
+            <div><span class="price">₹50</span><button class="add-btn" onclick="addToCart('Butter Naan', 50)">Add</button></div>
+        </div>
+        <div class="item-row">
+            <span>Special Thali</span>
+            <div><span class="price">₹350</span><button class="add-btn" onclick="addToCart('Special Thali', 350)">Add</button></div>
+        </div>
+
+        <div style="margin-top: 20px; text-align: right;">
+            <h3>Total: ₹<span id="menuTotal">0</span></h3>
+            <button class="btn-order" style="background: #d4af37; color: black;" onclick="showCheckout()">Checkout ➡️</button>
+        </div>
     </div>
 </div>
 
 <div id="checkoutPage">
+    <h2>Complete Order</h2>
     <div class="card">
-        <h3>Final Bill</h3>
-        <div id="billDetails"></div>
+        <button class="add-btn" style="background: #555; color: white;" onclick="location.reload()">⬅️ Back to Menu</button>
+        
+        <div class="bill-box" id="billSummary"></div>
+
         <input type="text" id="custName" placeholder="Aapka Naam">
-        <textarea id="custAddress" placeholder="Pura Address" rows="3"></textarea>
-        <input type="text" id="txnId" placeholder="Enter Transaction ID (Payment ke baad)">
-        <button class="btn" style="background: #27ae60;" onclick="sendWhatsApp()">🚀 ORDER ON WHATSAPP</button>
+        <textarea id="custAddress" placeholder="Ghar ka address, Landmark ke saath" rows="3"></textarea>
+        
+        <button class="btn-map" onclick="getLocation()">📍 Click to Add My Map Location</button>
+        <p id="locationStatus" style="font-size: 12px; color: #27ae60; text-align: center; margin-top: 5px;"></p>
+
+        <div style="background: #333; padding: 10px; border-radius: 8px; margin-top: 15px;">
+            <p style="font-size: 14px; margin-bottom: 5px;">Step 1: Pay Total via UPI</p>
+            <button class="btn-map" style="background: #e67e22;" onclick="payNow()">📱 Pay with PhonePe/GPay</button>
+            <p style="font-size: 14px; margin-top: 15px;">Step 2: Enter Payment ID</p>
+            <input type="text" id="txnId" placeholder="Transaction ID (UTR Number)">
+        </div>
+
+        <button class="btn-order" onclick="sendWhatsApp()">🚀 ORDER ON WHATSAPP</button>
     </div>
 </div>
 
 <script>
-    let cart = []; let total = 0;
-    function addToCart(name, price) { cart.push({name, price}); total += price; document.getElementById('menuTotal').innerText = total; }
+    let cart = [];
+    let total = 0;
+    let mapsLink = "Not Provided";
+
+    function addToCart(name, price) {
+        cart.push({name, price});
+        total += price;
+        document.getElementById('menuTotal').innerText = total;
+        alert(name + " added to cart!");
+    }
+
     function showCheckout() {
+        if(total === 0) { alert("Pehle kuch items add karein!"); return; }
         document.getElementById('menuPage').style.display = 'none';
         document.getElementById('checkoutPage').style.display = 'block';
-        let billHtml = ""; cart.forEach(item => { billHtml += `${item.name}: ₹${item.price}<br>`; });
-        document.getElementById('billDetails').innerHTML = billHtml + `<hr>Total: ₹${total}`;
+        
+        let billHtml = "<strong>Bill Summary:</strong><br>";
+        cart.forEach(item => { billHtml += `${item.name} - ₹${item.price}<br>`; });
+        billHtml += `<hr><strong>Total Bill: ₹${total}</strong>`;
+        document.getElementById('billSummary').innerHTML = billHtml;
     }
+
+    function getLocation() {
+        document.getElementById('locationStatus').innerText = "Fetching location... please allow access.";
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    mapsLink = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
+                    document.getElementById('locationStatus').innerText = "✅ Location Added Successfully!";
+                },
+                (error) => {
+                    alert("Location access denied. Please type address manually.");
+                    document.getElementById('locationStatus').innerText = "❌ Location Access Denied.";
+                }
+            );
+        }
+    }
+
+    function payNow() {
+        const upiId = "9474029463@okicici"; // Aapka UPI ID yahan daal dein
+        window.location.href = `upi://pay?pa=${upiId}&pn=VikasRestaurant&am=${total}&cu=INR`;
+    }
+
     function sendWhatsApp() {
         const name = document.getElementById('custName').value;
         const addr = document.getElementById('custAddress').value;
         const txn = document.getElementById('txnId').value;
-        let itemsText = ""; cart.forEach(item => { itemsText += `- ${item.name}: ₹${item.price}%0A`; });
-        const msg = `*🚀 NEW ORDER*%0A*Items:*%0A${itemsText}*Total: ₹${total}*%0A*Customer:* ${name}%0A*Address:* ${addr}%0A*Txn ID:* ${txn}`;
+
+        if(!name || !addr || !txn) { alert("Please fill Name, Address and Payment ID!"); return; }
+
+        let itemDetails = "";
+        cart.forEach(item => { itemDetails += `- ${item.name}: ₹${item.price}%0A`; });
+
+        const msg = `*🚀 NEW DELIVERY ORDER*%0A` +
+                    `--------------------------%0A` +
+                    `*Items:*%0A${itemDetails}` +
+                    `--------------------------%0A` +
+                    `*Total Amount: ₹${total}*%0A` +
+                    `--------------------------%0A` +
+                    `*Customer:* ${name}%0A` +
+                    `*Address:* ${addr}%0A` +
+                    `*Google Map:* ${mapsLink}%0A` +
+                    `*Transaction ID:* ${txn}%0A%0A` +
+                    `⚠️ _Please verify payment before delivery._`;
+
         window.open(`https://wa.me/919474029463?text=${msg}`);
     }
 </script>
+
 </body>
 </html>
