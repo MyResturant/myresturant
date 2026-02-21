@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery System</title>
+    <style>
+        body { font-family: sans-serif; background-color: #121212; color: white; padding: 15px; }
+        .card { background: #1e1e1e; padding: 20px; border-radius: 15px; border: 1px solid #d4af37; }
+        .item-row { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .btn { background: #d4af37; color: black; padding: 12px; width: 100%; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; background: #333; color: white; }
+        #checkoutPage { display: none; }
+    </style>
+</head>
+<body>
+
+<div id="menuPage">
+    <h2 style="color: #d4af37; text-align: center;">Vikas Delivery Menu</h2>
+    <div class="card">
+        <div class="item-row"><span>Paneer Tikka - ₹250</span><button onclick="addToCart('Paneer Tikka', 250)">Add</button></div>
+        <div class="item-row"><span>Butter Naan - ₹50</span><button onclick="addToCart('Butter Naan', 50)">Add</button></div>
+        <h3 style="text-align: right;">Total: ₹<span id="menuTotal">0</span></h3>
+        <button class="btn" onclick="showCheckout()">Next ➡️</button>
+    </div>
+</div>
+
+<div id="checkoutPage">
+    <div class="card">
+        <h3>Final Bill</h3>
+        <div id="billDetails"></div>
+        <input type="text" id="custName" placeholder="Aapka Naam">
+        <textarea id="custAddress" placeholder="Pura Address" rows="3"></textarea>
+        <input type="text" id="txnId" placeholder="Enter Transaction ID (Payment ke baad)">
+        <button class="btn" style="background: #27ae60;" onclick="sendWhatsApp()">🚀 ORDER ON WHATSAPP</button>
+    </div>
+</div>
+
+<script>
+    let cart = []; let total = 0;
+    function addToCart(name, price) { cart.push({name, price}); total += price; document.getElementById('menuTotal').innerText = total; }
+    function showCheckout() {
+        document.getElementById('menuPage').style.display = 'none';
+        document.getElementById('checkoutPage').style.display = 'block';
+        let billHtml = ""; cart.forEach(item => { billHtml += `${item.name}: ₹${item.price}<br>`; });
+        document.getElementById('billDetails').innerHTML = billHtml + `<hr>Total: ₹${total}`;
+    }
+    function sendWhatsApp() {
+        const name = document.getElementById('custName').value;
+        const addr = document.getElementById('custAddress').value;
+        const txn = document.getElementById('txnId').value;
+        let itemsText = ""; cart.forEach(item => { itemsText += `- ${item.name}: ₹${item.price}%0A`; });
+        const msg = `*🚀 NEW ORDER*%0A*Items:*%0A${itemsText}*Total: ₹${total}*%0A*Customer:* ${name}%0A*Address:* ${addr}%0A*Txn ID:* ${txn}`;
+        window.open(`https://wa.me/919474029463?text=${msg}`);
+    }
+</script>
+</body>
+</html>
